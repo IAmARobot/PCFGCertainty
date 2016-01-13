@@ -1,4 +1,4 @@
-from LOTlib.Evaluation.Eval import primitive
+from LOTlib.Evaluation import primitive
 
 @primitive
 def red_(img):

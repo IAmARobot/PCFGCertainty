@@ -8,6 +8,6 @@ do
     mpirun -np 2 python ProbeSpace.py --out "Data/"$1"/"$1"_"$time"_"$alpha".pkl" --condition $1 --time $time --alpha $alpha &
 done
 
-mpirun -np 2 python ProbeSpace.py --out "Data/"$1"/"$1"_24.pkl" --condition $1 --time 24 --alpha $alpha
+mpirun -np 2 python ProbeSpace.py --out "Data/"$1"/"$1"_24_"$alpha".pkl" --condition $1 --time 24 --alpha $alpha
 
 done
