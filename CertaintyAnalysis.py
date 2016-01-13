@@ -26,8 +26,7 @@ def assess_hyp(hypothesis, condition, currentTime):
     else:
         datum = data[-1]
     acc = hypothesis(*datum.input) == datum.output
-    return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc]]
-
+    return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha]]
 
 #############################################################################################
 #    MAIN CODE
