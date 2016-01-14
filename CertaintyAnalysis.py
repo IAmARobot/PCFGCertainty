@@ -51,7 +51,7 @@ for i, space in enumerate(hypothesis_space):
             results.append(result)
 
 print "Writing csv file . . ."
-with open(options.out_path, 'w') as f:
+with open(options.out_path, 'a') as f:
     f.write('\n'.join(result_strings))
 
 if options.pkl_loc is not None:
