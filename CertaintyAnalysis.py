@@ -52,7 +52,7 @@ for i, space in enumerate(hypothesis_space):
 
 print "Writing csv file . . ."
 with open(options.out_path, 'a') as f:
-    f.write('\n'.join(result_strings))
+    f.write('\n'.join(result_strings).join('\n'))
 
 if options.pkl_loc is not None:
     with open(options.pkl_loc, 'w') as f:
