@@ -50,6 +50,16 @@ for i, space in enumerate(hypothesis_space):
             result_strings.append(', '.join(str(j) for j in result))
             results.append(result)
 
+#if (currentLikelihood > maxLikelihood):
+#        maxLikelihood = currentLikelihood
+#        csvResult = result_strings
+#        pklResult = results
+
+#    result_strings = []
+#    results = []
+#    working_space = set()
+#    currentLikelihood = 0
+
 print "Writing csv file . . ."
 with open(options.out_path, 'a') as f:
     f.write('\n'.join(result_strings) + '\n')
