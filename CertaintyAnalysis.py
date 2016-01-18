@@ -42,7 +42,7 @@ results = []
 result_strings = []
 
 working_space = set()
-for i, space in enumerate(hypothesis_space):
+for i, space in enumerate(hypothesis_space): 
     working_space.update(space)
     for s, h in enumerate(working_space):
         for wrd in assess_hyp(h, options.condition, i+1):
