@@ -6,7 +6,7 @@ from Grammar import grammar
 
 class MyHypothesis(BinaryLikelihood, LOTHypothesis):
     def __init__(self, **kwargs):
-        LOTHypothesis.__init__(self, grammar=grammar, args=['IMG'], **kwargs)
+        LOTHypothesis.__init__(self, grammar=grammar, display="lambda IMG: %s", **kwargs)
 
     @attrmem('likelihood')
     def compute_likelihood(self, data, **kwargs):

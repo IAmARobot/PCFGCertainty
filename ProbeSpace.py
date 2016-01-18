@@ -3,7 +3,7 @@ import sys
 from LOTlib.Inference.Samplers.MetropolisHastings import MHSampler
 from LOTlib.MPI.MPI_map import MPI_map, is_master_process
 from LOTlib.Miscellaneous import display_option_summary, Infinity
-from LOTlib.MCMCSummary.TopN import TopN
+from LOTlib.TopN import TopN
 from LOTlib import break_ctrlc
 from optparse import OptionParser
 from Grammar import grammar
