@@ -297,6 +297,7 @@ condition9Answers = [1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0,
 condition10Answers = [0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0]
 
 conditions = dict()
+
 for i in xrange(1, 11):
     conditions['condition'+str(i)] = (eval('condition'+str(i)), eval('condition' + str(i) + 'Answers'))
 
@@ -307,7 +308,7 @@ alphaDecay = [0.5160735, 0.49, 0.47, 0.45, 0.43, 0.41, 0.39, 0.37, 0.35, 0.33,
 def make_data(condition, time):
     return [FunctionData(input = [x], output = y, alpha = z) for x, y, z in zip(conditions[condition][0][0:time],
                                                                                 conditions[condition][1][0:time]),
-                                                                                alphaDecay[time:None:-1]]
+                                                                                alphaDecay[time-1:None:-1]]
 
 if __name__ == "__main__":
     print make_data('condition10', 24, 0.9)
