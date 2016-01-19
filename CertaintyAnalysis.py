@@ -21,11 +21,14 @@ parser.add_option("--time", dest="time", type="int", default=24, help="With how 
 def assess_hyp(hypothesis, condition, currentTime):
     data = make_data(condition, currentTime, options.alpha)
     hypothesis.compute_likelihood(data)
+
     if currentTime < options.time:
         datum = make_data(condition, currentTime+1, options.alpha)[-1]
     else:
         datum = data[-1]
+
     acc = hypothesis(*datum.input) == datum.output
+
     return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha]]
 
 #############################################################################################
@@ -33,6 +36,7 @@ def assess_hyp(hypothesis, condition, currentTime):
 #############################################################################################
 print "Loading hypothesis space . . ."
 hypothesis_space = []
+
 for i in os.listdir(options.directory):
     with open(options.directory + i, 'r') as f:
         hypothesis_space.append(pickle.load(f))
@@ -42,10 +46,12 @@ results = []
 result_strings = []
 
 working_space = set()
-for i, space in enumerate(hypothesis_space): 
+
+for i, space in enumerate(hypothesis_space):
     working_space.update(space)
+
     for s, h in enumerate(working_space):
-        for wrd in assess_hyp(h, options.condition, i+1):
+        for wrd in assess_hyp(h, options.condition, i + 1):
             result = [s] + wrd
             result_strings.append(', '.join(str(j) for j in result))
             results.append(result)
