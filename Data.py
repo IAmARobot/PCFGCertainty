@@ -305,7 +305,7 @@ for i in xrange(1, 11):
 #              0.11, 0.09, 0.07, 0.05]
 
 def make_data(condition, time, alphaa):
-    return [FunctionData(input = [x], output = y, alpha = alphaa) for x, y, z in zip(conditions[condition][0][0:time],
+    return [FunctionData(input = [x], output = y, alpha = alphaa) for x, y in zip(conditions[condition][0][0:time],
                                                                                 conditions[condition][1][0:time])]
 
 if __name__ == "__main__":
