@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-mkdir Data/$1
 
-for time in {1..23}
+for condition in "condition1" "condition2" "condition3" "condition4" "condition5" "condition6" "condition7" "condition8" "condition9" "condition10"
 do
-    mpirun -np 2 python ProbeSpace.py --out "Data/"$1"/"$1"_"$time".pkl" --condition $1 --time $time &
-done
+    for time in {1..23}
+    do
+        mpirun -np 2 python ProbeSpace.py --out "Data/"$condition"/"$condition"_"$time".pkl" --condition $condition --time $time &
+    done
 
-mpirun -np 2 python ProbeSpace.py --out "Data/"$1"/"$1"_24.pkl" --condition $1 --time 24
+    mpirun -np 2 python ProbeSpace.py --out "Data/"$condition"/"$condition"_24.pkl" --condition $condition --time 24
+done
