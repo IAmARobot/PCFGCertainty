@@ -61,8 +61,9 @@ if is_master_process():
     display_option_summary(options)
 
 hypothesis_space = set()
-for h in MPI_map(run, argarray, progress_bar=False):
-        hypothesis_space.update(h)
+
+for h in MPI_map(run, argarray, progress_bar = False):
+    hypothesis_space.update(h)
 
 import pickle
 with open(options.out_path, 'w') as f:

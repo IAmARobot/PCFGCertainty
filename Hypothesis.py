@@ -5,16 +5,12 @@ from LOTlib.Hypotheses.Likelihoods.BinaryLikelihood import BinaryLikelihood
 from LOTlib.Hypotheses.Likelihoods.PowerLawDecayed import PowerLawDecayed
 from Grammar import grammar
 
-class MyHypothesis(BinaryLikelihood, LOTHypothesis, PowerLawDecayed):
+class MyHypothesis(LOTHypothesis, PowerLawDecayed):
     def __init__(self, **kwargs):
         LOTHypothesis.__init__(self, grammar=grammar, display="lambda IMG: %s", **kwargs)
 
-    @attrmem('likelihood')
-    def compute_likelihood(self, data, **kwargs):
-        ll = 0
-
-        for datum in data:
-            ll += log(datum.alpha * (self(*datum.input) == datum.output) + (1.0 - datum.alpha) / 2.0)
+    def compute_single_likelihood(self, datum, **kwargs):
+        ll = log(datum.alpha * (self(*datum.input) == datum.output) + (1.0 - datum.alpha) / 2.0)
 
         return ll / self.likelihood_temperature
 
