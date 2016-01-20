@@ -4,6 +4,7 @@ from optparse import OptionParser
 from Data import make_data
 from Primitives import *
 from Hypothesis import *
+
 #############################################################################################
 #    Option Parser
 #############################################################################################
@@ -19,11 +20,11 @@ parser.add_option("--time", dest="time", type="int", default=24, help="With how 
 (options, args) = parser.parse_args()
 
 def assess_hyp(hypothesis, condition, currentTime):
-    data = make_data(condition, currentTime)
+    data = make_data(condition, currentTime, options.alpha)
     hypothesis.compute_likelihood(data)
 
     if currentTime < options.time:
-        datum = make_data(condition, currentTime + 1)[-1]
+        datum = make_data(condition, currentTime + 1, options.alpha)[-1]
     else:
         datum = data[-1]
 
