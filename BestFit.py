@@ -11,7 +11,7 @@ import math
 from collections import defaultdict
 
 hypothesis_space = defaultdict(lambda: [])
-data = defaultdict(lambda : defaultdict(int))
+data = defaultdict(lambda : defaultdict(lambda: []))
 
 # Populate hypothesis space for each condition
 for condition in xrange(1, 11):
@@ -63,13 +63,13 @@ for alpha in numpy.linspace(0, 1, num = 10):
                 for h in s:
                     h.compute_posterior(d[0:(trial - 1)])
 
-            Z = logsumexp([h.posterior_score for h in hs])
+            Z = logsumexp([h.posterior_score for s in hs for h in s])
 
             # compute the predicted probability of being accurate
-            hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(d[trial]) == d[trial].output])
+            hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if h(d[trial - 1]) == d[trial - 1].output])
 
             # mix to in the alpha (again) to account for the noise assumed in the model
-            predicted_accuracy = alpha * hyp_accuracy + (1.0 - alpha) * 0.5
+            predicted_accuracy = alpha * hyp_accuracy + (1 - alpha) * 0.5
 
             # compute the probability of the observed responses given the model prediction
             pHumanData += log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
