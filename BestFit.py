@@ -74,7 +74,7 @@ for alpha in numpy.linspace(0, 1, num = 10):
             Z = logsumexp([h.posterior_score for s in hs for h in s])
 
             # compute the predicted probability of being accurate
-            hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if h(d[trial - 1]) == d[trial - 1].output])
+            hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if h(d[trial]) == d[trial].output])
 
             # mix to in the alpha (again) to account for the noise assumed in the model
             predicted_accuracy = alpha * hyp_accuracy + (1 - alpha) * 0.5
