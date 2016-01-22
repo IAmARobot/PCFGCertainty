@@ -36,7 +36,6 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
         # Set the decays
         for hs in hypothesis_space.values():
-            print hs
             for h in hs:
                 print h
                 h.ll_decay = beta
