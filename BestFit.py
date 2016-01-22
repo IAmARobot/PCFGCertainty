@@ -68,6 +68,8 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
             Z = logsumexp([h.posterior_score for s in hs for h in s])
 
+            print d[trial]
+
             for s in hs:
                 for h in s:
                     for dp in d[trial]:
