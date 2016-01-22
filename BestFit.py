@@ -43,7 +43,7 @@ for alpha in numpy.linspace(0, 1, num = 10):
         # set the alpha
         for condition in xrange(1, 11):
             for time in xrange(1, 25):
-                data[condition][time] = make_data(condition, time, alpha)
+                data[condition][time] = make_data('condition' + str(condition), time, alpha)
 
         pHumanData = 0.0
 
