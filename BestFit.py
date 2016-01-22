@@ -55,13 +55,15 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
             hs = hypothesis_space[condition]
             d = data[condition]
-            previousData = []
 
             # compute the posterior using all previous data
             for s in hs:
                 for h in s:
-                    for t in xrange(1, trial + 1):
-                        print t
+                    previousData = d[1]
+                    print previousData
+
+                    for t in xrange(2, trial + 1):
+                        print d[t]
 
                         previousData.append(d[t])
 
