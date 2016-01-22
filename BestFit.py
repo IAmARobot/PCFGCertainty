@@ -47,7 +47,7 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
         pHumanData = 0.0
 
-        for index, row in behavioralData.iterrows():
+        for index, row in behavioralData.itertuples():
             print index
             print row
             condition, trial, number_inaccurate, number_accurate =  behavioralData[index] #something like that
