@@ -58,7 +58,7 @@ for alpha in numpy.linspace(0, 1, num = 10):
         # set the alpha
         for condition in numpy.linspace(1, 10, num = 10):
             for time in numpy.linspace(1, 24, num = 1):
-                data[condition] = make_data(condition, time, alpha)
+                data[condition][time] = make_data(condition, time, alpha)
 
         pHumanData = 0.0
 
