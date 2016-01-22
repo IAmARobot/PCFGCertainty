@@ -11,7 +11,7 @@ import math
 from collections import defaultdict
 
 hypothesis_space = defaultdict(lambda: [])
-data = defaultdict(lambda: [defaultdict(lambda: [])])
+data = defaultdict(lambda : defaultdict(int))
 
 # Populate hypothesis space for each condition
 for condition in xrange(1, 11):
