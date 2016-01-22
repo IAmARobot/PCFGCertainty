@@ -31,7 +31,7 @@ data = defaultdict(lambda: [])
 
 # Populate hypothesis space for each condition
 for condition in numpy.linspace(1, 10, num = 10):
-    for i in os.listdir("Data/condition" + condition):
+    for i in os.listdir("Data/condition" + str(condition)):
         with open("Data/condition" + condition + i, 'r') as f:
             hypothesis_space[condition].append(pickle.load(f))
 
