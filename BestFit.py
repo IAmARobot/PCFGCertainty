@@ -10,29 +10,13 @@ import pandas
 import math
 from collections import defaultdict
 
-def assess_hyp(hypothesis, condition, currentTime, alpha):
-    data = make_data(condition, currentTime, alpha)
-    hypothesis.compute_likelihood(data)
-
-    if currentTime < options.time:
-        datum = make_data(condition, currentTime + 1, options.alpha)[-1]
-    else:
-        datum = data[-1]
-
-    acc = hypothesis(*datum.input) == datum.output
-
-    return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha]]
-
-#############################################################################################
-#    MAIN CODE
-#############################################################################################
 hypothesis_space = defaultdict(lambda: [])
 data = defaultdict(lambda: [])
 
 # Populate hypothesis space for each condition
-for condition in numpy.linspace(1, 10, num = 10):
+for condition in xrange(1, 11):
     for i in os.listdir("Data/condition" + str(condition)):
-        with open("Data/condition" + condition + i, 'r') as f:
+        with open("Data/condition" + str(condition) + i, 'r') as f:
             hypothesis_space[condition].append(pickle.load(f))
 
 results = []
