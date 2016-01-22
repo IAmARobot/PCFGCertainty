@@ -53,17 +53,13 @@ for alpha in numpy.linspace(0, 1, num = 10):
             number_inaccurate = row[3]
             number_accurate = row[4]
 
-            print condition
-            print trial
-            print number_inaccurate
-            print number_accurate
-
             hs = hypothesis_space[condition]
             d = data[condition]
 
             # compute the posterior using all previous data
-            for h in hs:
-                h.compute_posterior(d[0:(trial - 1)])
+            for s in hs:
+                for h in s:
+                    h.compute_posterior(d[0:(trial - 1)])
 
             Z = logsumexp([h.posterior_score for h in hs])
 
