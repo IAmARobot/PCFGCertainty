@@ -12,7 +12,7 @@ class MyHypothesis(LOTHypothesis, PowerLawDecayed):
     def compute_single_likelihood(self, datum, **kwargs):
         ll = log(datum.alpha * (self(*datum.input) == datum.output) + (1.0 - datum.alpha) / 2.0)
 
-        return ll / self.likelihood_temperature
+        return ll
 
 def make_hypothesis(**kwargs):
     return MyHypothesis(**kwargs)
