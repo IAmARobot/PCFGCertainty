@@ -38,12 +38,11 @@ for alpha in numpy.linspace(0, 1, num = 10):
         for hs in hypothesis_space.values():
             for s in hs:
                 for h in s:
-                    print h
                     h.ll_decay = beta
 
         # set the alpha
-        for condition in numpy.linspace(1, 10, num = 10):
-            for time in numpy.linspace(1, 24, num = 1):
+        for condition in xrange(1, 11):
+            for time in xrange(1, 25):
                 data[condition][time] = make_data(condition, time, alpha)
 
         pHumanData = 0.0
