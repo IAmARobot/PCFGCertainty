@@ -48,6 +48,7 @@ for alpha in numpy.linspace(0, 1, num = 10):
         pHumanData = 0.0
 
         for row in behavioralData: ## check indexing in pandas
+            print row
             condition, trial, number_inaccurate, number_accurate =  behavioralData[row] #something like that
 
             hs = hypothesis_space[condition]
