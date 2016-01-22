@@ -47,9 +47,10 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
         pHumanData = 0.0
 
-        for row in behavioralData: ## check indexing in pandas
+        for index, row in behavioralData.iterrows():
+            print index
             print row
-            condition, trial, number_inaccurate, number_accurate =  behavioralData[row] #something like that
+            condition, trial, number_inaccurate, number_accurate =  behavioralData[index] #something like that
 
             hs = hypothesis_space[condition]
             d = data[condition]
