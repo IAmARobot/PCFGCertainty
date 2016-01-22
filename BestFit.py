@@ -16,7 +16,7 @@ data = defaultdict(lambda: [])
 # Populate hypothesis space for each condition
 for condition in xrange(1, 11):
     for i in os.listdir("Data/condition" + str(condition)):
-        with open("Data/condition" + str(condition) + i, 'r') as f:
+        with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
             hypothesis_space[condition].append(pickle.load(f))
 
 results = []
