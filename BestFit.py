@@ -60,18 +60,21 @@ for alpha in numpy.linspace(0, 1, num = 10):
             for s in hs:
                 for h in s:
                     previousData = d[1]
-                    print previousData
 
                     for t in xrange(2, trial + 1):
-                        print d[t]
-
                         previousData.append(d[t])
-
-                        print previousData
 
                     h.compute_posterior(previousData)
 
             Z = logsumexp([h.posterior_score for s in hs for h in s])
+
+            for s in hs:
+                for h in s:
+                    print h
+                    print d
+                    print trial
+                    print d[trial]
+                    print h(d[trial])
 
             # compute the predicted probability of being accurate
             hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if h(d[trial]) == d[trial].output])
