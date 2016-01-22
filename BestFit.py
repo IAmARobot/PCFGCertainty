@@ -56,6 +56,8 @@ for alpha in numpy.linspace(0, 1, num = 10):
             hs = hypothesis_space[condition]
             d = data[condition]
 
+            print d
+
             # compute the posterior using all previous data
             for s in hs:
                 for h in s:
