@@ -76,6 +76,13 @@ for alpha in numpy.linspace(0, 1, num = 10):
                         print h(dp.input)
 
             # compute the predicted probability of being accurate
+            for s in hs:
+                for h in s:
+                    tmp_acc = sum([int(h(dp.input) == dp.output) for dp in d[trial]])
+                    best_acc = len(d[trial])
+                    print tmp_acc, best_acc
+
+            # compute the predicted probability of being accurate
             hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if sum([int(h(dp.input) == dp.output) for dp in d[trial]]) == len(d[trial])])
 
             # mix to in the alpha (again) to account for the noise assumed in the model
