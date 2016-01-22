@@ -55,13 +55,19 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
             hs = hypothesis_space[condition]
             d = data[condition]
-
-            print d
+            previousData = []
 
             # compute the posterior using all previous data
             for s in hs:
                 for h in s:
-                    h.compute_posterior(d[0:(trial - 1)])
+                    for t in xrange(1, trial + 1):
+                        print t
+
+                        previousData.append(d[t])
+
+                        print previousData
+
+                    h.compute_posterior(previousData)
 
             Z = logsumexp([h.posterior_score for s in hs for h in s])
 
