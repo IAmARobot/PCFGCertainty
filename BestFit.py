@@ -48,8 +48,15 @@ for alpha in numpy.linspace(0, 1, num = 10):
         pHumanData = 0.0
 
         for row in behavioralData.itertuples():
-            print row
-            condition, trial, number_inaccurate, number_accurate =  behavioralData[row] #something like that
+            condition = row[1]
+            trial = row[2]
+            number_inaccurate = row[3]
+            number_accurate = row[4]
+
+            print condition
+            print trial
+            print number_inaccurate
+            print number_accurate
 
             hs = hypothesis_space[condition]
             d = data[condition]
