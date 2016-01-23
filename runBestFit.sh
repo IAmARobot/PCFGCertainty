@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for beta in .5 1 1.5 2 2.5 3 3.5 4 4.5 5
+for alpha in .2 .3 .4 .5 .6 .7 .8 .9 1
 do
-    mpirun -np 2 python BestFit.py --alpha $1 --beta $beta &
+    mpirun -np 2 python BestFit.py --alpha $alpha &
 done
