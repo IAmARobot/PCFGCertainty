@@ -73,17 +73,15 @@ for alpha in numpy.linspace(0, 1, num = 10):
             # compute the predicted probability of being accurate
             for s in hs:
                 for h in s:
-                    for s, dp in enumerate(d[trial]):
-                        if s > 0:
-                            print dp
-                            print dp.input[0]
-                            print h(dp.input[0])
+                    #for s, dp in enumerate(d[trial]):
+                        #if s > 0:
+                            #print dp
+                            #print dp.input[0]
+                            #print h(dp.input[0])
 
-                    tmp_acc = sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]])
-                    best_acc = len(d[trial])
-                    print tmp_acc, best_acc
-
-            hyp_accuracy = 1
+                    hyp_accuracy = sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]])
+                    #best_acc = len(d[trial])
+                    #print tmp_acc, best_acc
 
             # mix to in the alpha (again) to account for the noise assumed in the model
             predicted_accuracy = alpha * hyp_accuracy + (1 - alpha) * 0.5
