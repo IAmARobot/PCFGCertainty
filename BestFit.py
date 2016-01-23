@@ -80,4 +80,4 @@ for row in behavioralData.itertuples():
 print options.alpha, options.beta, pHumanData
 
 with open('bestFits.csv', 'a') as f:
-    f.write(options.alpha + ',' + options.beta + ',' + pHumanData + ',' + '\n')
+    f.write(str(options.alpha) + ',' + str(options.beta) + ',' + str(pHumanData) + ',' + '\n')
