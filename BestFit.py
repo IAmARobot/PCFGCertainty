@@ -56,6 +56,7 @@ for beta in numpy.linspace(0, 1, num = 20):
             h.ll_decay = beta
 
     pHumanData = 0.0
+
     for row in behavioralData.itertuples():
         condition, trial, number_inaccurate, number_accurate = row[1:5]
         if condition not in hypothesis_space: continue
