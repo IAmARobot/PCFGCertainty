@@ -73,8 +73,8 @@ for alpha in numpy.linspace(0, 1, num = 10):
             # compute the predicted probability of being accurate
             for s in hs:
                 for h in s:
-                    for s, dp in enumerate(d[trial]):
-                        if s > 0:
+                    #for s, dp in enumerate(d[trial]):
+                        #if s > 0:
                             #print dp
                             #print dp.input
                             #print h(dp.input)
