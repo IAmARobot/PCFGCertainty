@@ -9,7 +9,20 @@ import numpy
 import pandas
 import math
 from collections import defaultdict
+from optparse import OptionParser
 
+#############################################################################################
+#    Option Parser
+#############################################################################################
+parser = OptionParser()
+parser.add_option("--alpha", dest="alpha", type="float", default=0.5160735, help="Reliability value 0-1")
+parser.add_option("--beta", dest="beta", type="float", default=0.5160735, help="Memory decay value 0-5")
+
+(options, args) = parser.parse_args()
+
+#############################################################################################
+#    MAIN CODE
+#############################################################################################
 hypothesis_space = defaultdict(lambda: [])
 data = defaultdict(lambda : defaultdict(lambda: []))
 
@@ -19,69 +32,49 @@ for condition in xrange(1, 11):
         with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
             hypothesis_space[condition].append(pickle.load(f))
 
-results = []
-result_strings = []
-maxPHumanData = 0
-idealAlpha = 0
-idealBeta = 0
-currentPData = 0
-
 behavioralData = pandas.read_csv('behavioralAccuracyCounts.csv')
 
-## Let's pretend hypothesis_space is a dict from conditions to a set of hypotheses
-## Pretend data is dict from conditions to the list of data
+# Set the decays
+for hs in hypothesis_space.values():
+    for s in hs:
+        for h in s:
+            h.ll_decay = options.beta
 
-for alpha in numpy.linspace(0, 1, num = 10):
-    for beta in numpy.linspace(0, 5, num = 10):
+# set the alpha
+for condition in xrange(1, 11):
+    for time in xrange(1, 25):
+        data[condition][time] = make_data('condition' + str(condition), time, options.alpha)
 
-        # Set the decays
-        for hs in hypothesis_space.values():
-            for s in hs:
-                for h in s:
-                    h.ll_decay = beta
+pHumanData = 0.0
 
-        # set the alpha
-        for condition in xrange(1, 11):
-            for time in xrange(1, 25):
-                data[condition][time] = make_data('condition' + str(condition), time, alpha)
+for row in behavioralData.itertuples():
+    condition = row[1]
+    trial = row[2]
+    number_inaccurate = row[3]
+    number_accurate = row[4]
 
-        pHumanData = 0.0
+    hs = hypothesis_space[condition]
+    d = data[condition]
 
-        for row in behavioralData.itertuples():
-            condition = row[1]
-            trial = row[2]
-            number_inaccurate = row[3]
-            number_accurate = row[4]
+    previousData = d[1]
 
-            hs = hypothesis_space[condition]
-            d = data[condition]
+    for t in xrange(2, trial + 1):
+        previousData = previousData + d[t]
 
-            previousData = d[1]
+    # compute the posterior using all previous data
+    for s in hs:
+        for h in s:
+            h.compute_posterior(previousData)
 
-            for t in xrange(2, trial + 1):
-                previousData = previousData + d[t]
+    Z = logsumexp([h.posterior_score for s in hs for h in s])
 
-            # compute the posterior using all previous data
-            for s in hs:
-                for h in s:
-                    h.compute_posterior(previousData)
+    # compute the predicted probability of being accurate
+    hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]]) == len(d[trial])])
 
-            Z = logsumexp([h.posterior_score for s in hs for h in s])
+    # mix to in the alpha (again) to account for the noise assumed in the model
+    predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * 0.5
 
-            # compute the predicted probability of being accurate
-            hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]]) == len(d[trial])])
+    # compute the probability of the observed responses given the model prediction
+    pHumanData += log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
-            # mix to in the alpha (again) to account for the noise assumed in the model
-            predicted_accuracy = alpha * hyp_accuracy + (1 - alpha) * 0.5
-
-            # compute the probability of the observed responses given the model prediction
-            pHumanData += log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
-
-        print alpha, beta, pHumanData
-
-        if (pHumanData > maxPHumanData):
-            maxPHumanData = pHumanData
-            idealAlpha = alpha
-            idealBeta = beta
-
-print "Best: ", idealAlpha, idealBeta, maxPHumanData
+print options.alpha, options.beta, pHumanData
