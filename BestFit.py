@@ -14,14 +14,13 @@ from optparse import OptionParser
 #############################################################################################
 parser = OptionParser()
 parser.add_option("--alpha", dest="alpha", type="float", default=0.1, help="Reliability value 0-1")
-parser.add_option("--beta", dest="beta", type="float", default=0.5, help="Memory decay value 0-5")
+#parser.add_option("--beta", dest="beta", type="float", default=0.5, help="Memory decay value 0-5")
 
 (options, args) = parser.parse_args()
 
 #############################################################################################
 #    MAIN CODE
 #############################################################################################
-print "# Starting", options.alpha, options.beta
 
 # Populate hypothesis space for each condition
 # Let's make a single set, the union of the sets over time
@@ -48,37 +47,39 @@ print "# Constructed data"
 # print "alpha beta pHumanData" # if you want a header
 
 #for alpha in numpy.linspace(0, 1, num = 10):
-#for beta in numpy.linspace(0, 1, num = 20):
+for beta in numpy.linspace(0, 1, num = 20):
+    print "# Starting", options.alpha, beta
+
     # Set the decays
-for hs in hypothesis_space.values():
-    for h in hs:
-        h.ll_decay = options.beta
+    for hs in hypothesis_space.values():
+        for h in hs:
+            h.ll_decay = beta
 
-pHumanData = 0.0
-for row in behavioralData.itertuples():
-    condition, trial, number_inaccurate, number_accurate = row[1:5]
-    if condition not in hypothesis_space: continue
+    pHumanData = 0.0
+    for row in behavioralData.itertuples():
+        condition, trial, number_inaccurate, number_accurate = row[1:5]
+        if condition not in hypothesis_space: continue
 
-    hs = hypothesis_space[condition]
-    d = data[condition]
+        hs = hypothesis_space[condition]
+        d = data[condition]
 
-    # compute the posterior using all previous data
-    for s in hs:
-        h.compute_posterior(d[0:trial]) # all previous data
+        # compute the posterior using all previous data
+        for s in hs:
+            h.compute_posterior(d[0:trial]) # all previous data
 
-    Z = logsumexp([h.posterior_score for h in hs])
+        Z = logsumexp([h.posterior_score for h in hs])
 
-    # compute the predicted probability of being accurate
-    hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial].input) == d[trial].output])
-    assert 0.0 <= hyp_accuracy <= 1.0
+        # compute the predicted probability of being accurate
+        hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial].input) == d[trial].output])
+        assert 0.0 <= hyp_accuracy <= 1.0
 
-    # mix to in the alpha (again) to account for the noise assumed in the model
-    predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * 0.5
+        # mix to in the alpha (again) to account for the noise assumed in the model
+        predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * 0.5
 
-    # compute the probability of the observed responses given the model prediction
-    pHumanData += log(predicted_accuracy) * number_accurate + log(1.0 - predicted_accuracy) * number_inaccurate
+        # compute the probability of the observed responses given the model prediction
+        pHumanData += log(predicted_accuracy) * number_accurate + log(1.0 - predicted_accuracy) * number_inaccurate
 
-print options.alpha, options.beta, pHumanData
+    print options.alpha, beta, pHumanData
 
-with open('bestFits.csv', 'a') as f:
-    f.write(str(options.alpha) + ',' + str(options.beta) + ',' + str(pHumanData) + ',' + '\n')
+    with open('bestFits.csv', 'a') as f:
+        f.write(str(options.alpha) + ',' + str(beta) + ',' + str(pHumanData) + ',' + '\n')
