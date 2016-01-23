@@ -56,20 +56,20 @@ for alpha in numpy.linspace(0, 1, num = 10):
             hs = hypothesis_space[condition]
             d = data[condition]
 
+            previousData = d[1]
+
+            for t in xrange(2, trial + 1):
+                previousData = previousData + d[t]
+
             # compute the posterior using all previous data
             for s in hs:
                 for h in s:
-                    previousData = d[1]
-
-                    for t in xrange(2, trial + 1):
-                        previousData = previousData + d[t]
-
                     h.compute_posterior(previousData)
 
             Z = logsumexp([h.posterior_score for s in hs for h in s])
 
             # compute the predicted probability of being accurate
-            hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if sum([int(h(dp.input) == dp.output) for dp in d[trial]]) == len(d[trial]) ])
+            hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]]) == len(d[trial])])
 
             # mix to in the alpha (again) to account for the noise assumed in the model
             predicted_accuracy = alpha * hyp_accuracy + (1 - alpha) * 0.5
