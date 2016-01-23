@@ -79,5 +79,5 @@ for row in behavioralData.itertuples():
 
 print options.alpha, options.beta, pHumanData
 
-#with open(options.out_path, 'a') as f:
-#    f.write('\n'.join(result_strings) + '\n')
+with open('bestFits.csv', 'a') as f:
+    f.write(options.alpha + ',' + options.beta + ',' + pHumanData + ',' + '\n')
