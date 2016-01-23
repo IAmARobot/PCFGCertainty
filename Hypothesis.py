@@ -5,7 +5,7 @@ from LOTlib.Hypotheses.Likelihoods.BinaryLikelihood import BinaryLikelihood
 from LOTlib.Hypotheses.Likelihoods.PowerLawDecayed import PowerLawDecayed
 from Grammar import grammar
 
-class MyHypothesis(LOTHypothesis, PowerLawDecayed):
+class MyHypothesis(PowerLawDecayed, LOTHypothesis):
     def __init__(self, **kwargs):
         LOTHypothesis.__init__(self, grammar=grammar, display="lambda IMG: %s", **kwargs)
 

@@ -23,62 +23,61 @@ parser.add_option("--alpha", dest="alpha", type="float", default=0.1, help="Reli
 #############################################################################################
 #    MAIN CODE
 #############################################################################################
+print "# Starting"
+
+# Populate hypothesis space for each condition
+# Let's make a single set, the union of the sets over time
+hypothesis_space = defaultdict(set)
+for condition in xrange(1, 11):
+    for i in os.listdir("Data/condition" + str(condition)):
+        print "# Loading ", i
+        with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
+            hypothesis_space[condition].update(pickle.load(f))
+print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
+
+behavioralData = pandas.read_csv('behavioralAccuracyCounts.csv')
+print "# Loaded behavioral data"
+
+data = dict()
+for condition in xrange(1, 11):
+    data[condition] = [ make_data('condition' + str(condition), time, alpha=options.alpha) for time in xrange(24)]
+print "# Constructed data"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Main loop
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# print "alpha beta pHumanData" # if you want a header
 
 #for alpha in numpy.linspace(0, 1, num = 10):
-for beta in numpy.linspace(0, 5, num = 10):
-    hypothesis_space = defaultdict(lambda: [])
-    data = defaultdict(lambda : defaultdict(lambda: []))
-
-    # Populate hypothesis space for each condition
-    for condition in xrange(1, 11):
-        for i in os.listdir("Data/condition" + str(condition)):
-            with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
-                hypothesis_space[condition].append(pickle.load(f))
-
-    behavioralData = pandas.read_csv('behavioralAccuracyCounts.csv')
+for beta in numpy.linspace(0, 3, num = 20):
 
     # Set the decays
     for hs in hypothesis_space.values():
-        for s in hs:
-            for h in s:
-                h.ll_decay = beta
-
-    # set the alpha
-    for condition in xrange(1, 11):
-        for time in xrange(1, 25):
-            data[condition][time] = make_data('condition' + str(condition), time, options.alpha)
+        for h in hs:
+            h.ll_decay = beta
 
     pHumanData = 0.0
-
     for row in behavioralData.itertuples():
-        condition = row[1]
-        trial = row[2]
-        number_inaccurate = row[3]
-        number_accurate = row[4]
+        condition, trial, number_inaccurate, number_accurate = row[1:5]
 
         hs = hypothesis_space[condition]
         d = data[condition]
 
-        previousData = d[1]
-
-        for t in xrange(2, trial + 1):
-            previousData = previousData + d[t]
-
         # compute the posterior using all previous data
         for s in hs:
-            for h in s:
-                h.compute_posterior(previousData)
+            h.compute_posterior(d[0:trial]) # all previous data
 
-        Z = logsumexp([h.posterior_score for s in hs for h in s])
+        Z = logsumexp([h.posterior_score for h in hs])
 
         # compute the predicted probability of being accurate
-        hyp_accuracy = sum([math.exp(h.posterior_score - Z) for s in hs for h in s if sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]]) == len(d[trial])])
+        hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial].input) == d[trial].output])
+        assert 0.0 <= hyp_accuracy <= 1.0
 
         # mix to in the alpha (again) to account for the noise assumed in the model
         predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * 0.5
 
         # compute the probability of the observed responses given the model prediction
-        pHumanData += log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
+        pHumanData += log(predicted_accuracy) * number_accurate + log(1.0 - predicted_accuracy) * number_inaccurate
 
     print options.alpha, beta, pHumanData
 
