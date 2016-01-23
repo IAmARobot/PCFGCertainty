@@ -51,7 +51,6 @@ print "# Constructed data"
 
 #for alpha in numpy.linspace(0, 1, num = 10):
 for beta in numpy.linspace(0, 3, num = 20):
-
     # Set the decays
     for hs in hypothesis_space.values():
         for h in hs:
