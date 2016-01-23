@@ -63,7 +63,7 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
                     for t in xrange(2, trial + 1):
                         previousData = previousData + d[t]
-                    print previousData
+
                     h.compute_posterior(previousData)
 
             Z = logsumexp([h.posterior_score for s in hs for h in s])
@@ -76,8 +76,8 @@ for alpha in numpy.linspace(0, 1, num = 10):
                     for s, dp in enumerate(d[trial]):
                         if s > 0:
                             print dp
-                            print dp.input
-                            print h(dp.input)
+                            print dp.input[0]
+                            print h(dp.input[0])
 
                     tmp_acc = sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]])
                     best_acc = len(d[trial])
