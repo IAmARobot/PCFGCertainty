@@ -70,16 +70,15 @@ for alpha in numpy.linspace(0, 1, num = 10):
 
             print d[trial]
 
-            for s in hs:
-                for h in s:
-                    for dp in d[trial]:
-                        print dp
-                        print dp.input[0]
-                        print h(dp.input[0])
-
             # compute the predicted probability of being accurate
             for s in hs:
                 for h in s:
+                    for s, dp in enumerate(d[trial]):
+                        if s > 0:
+                            print dp
+                            print dp.input
+                            print h(dp.input)
+
                     tmp_acc = sum([int(h(dp.input[0]) == dp.output) for dp in d[trial]])
                     best_acc = len(d[trial])
                     print tmp_acc, best_acc
