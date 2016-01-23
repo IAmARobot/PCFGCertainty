@@ -15,8 +15,8 @@ from optparse import OptionParser
 #    Option Parser
 #############################################################################################
 parser = OptionParser()
-parser.add_option("--alpha", dest="alpha", type="float", default=0.5160735, help="Reliability value 0-1")
-parser.add_option("--beta", dest="beta", type="float", default=0.5160735, help="Memory decay value 0-5")
+parser.add_option("--alpha", dest="alpha", type="float", default=0.1, help="Reliability value 0-1")
+parser.add_option("--beta", dest="beta", type="float", default=0.5, help="Memory decay value 0-5")
 
 (options, args) = parser.parse_args()
 
@@ -78,3 +78,6 @@ for row in behavioralData.itertuples():
     pHumanData += log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
 print options.alpha, options.beta, pHumanData
+
+#with open(options.out_path, 'a') as f:
+#    f.write('\n'.join(result_strings) + '\n')
