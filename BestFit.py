@@ -27,8 +27,9 @@ print "# Starting"
 
 # Populate hypothesis space for each condition
 # Let's make a single set, the union of the sets over time
-hypothesis_space = defaultdict(set)
+hypothesis_space = dict()
 for condition in xrange(1, 11):
+    hypothesis_space[condition] = set()
     for i in os.listdir("Data/condition" + str(condition)):
         print "# Loading ", i
         with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
@@ -59,6 +60,7 @@ for beta in numpy.linspace(0, 3, num = 20):
     pHumanData = 0.0
     for row in behavioralData.itertuples():
         condition, trial, number_inaccurate, number_accurate = row[1:5]
+        if condition not in hypothesis_space: continue
 
         hs = hypothesis_space[condition]
         d = data[condition]
