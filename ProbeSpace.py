@@ -38,15 +38,13 @@ parser.add_option("--pt", dest="prior_temp", type="float", default=1.0, help="Pr
 ######################################################################################################
 def run(data_pts):
     h0 = make_hypothesis()
-    hyps = TopN(N=options.top_count)
+    h0.ll_decay = options.beta
 
-    mhs = MHSampler(h0, data_pts, options.steps, likelihood_temperature=options.llt,
-                    prior_temperature=options.prior_temp)
+    hyps = TopN(N = options.top_count)
+
+    mhs = MHSampler(h0, data_pts, options.steps, likelihood_temperature = options.llt, prior_temperature = options.prior_temp)
 
     for samples_yielded, h in break_ctrlc(enumerate(mhs)):
-        #if samples_yielded % 100 == 0:
-            #print h.prior, h.likelihood, h
-
         h.ll_decay = options.beta
         hyps.add(h)
 

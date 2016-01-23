@@ -1,7 +1,5 @@
 from math import log
-from LOTlib.Miscellaneous import attrmem
 from LOTlib.Hypotheses.LOTHypothesis import LOTHypothesis
-from LOTlib.Hypotheses.Likelihoods.BinaryLikelihood import BinaryLikelihood
 from LOTlib.Hypotheses.Likelihoods.PowerLawDecayed import PowerLawDecayed
 from Grammar import grammar
 

@@ -14,12 +14,15 @@ parser.add_option("--pickle", dest="pkl_loc", type="string", help="Output a pkl"
 parser.add_option("--write", dest="out_path", type="string", help="Results csv", default="results.csv")
 
 parser.add_option("--alpha", dest="alpha", type="float", default=0.1, help="Reliability value (0-1]")
+parser.add_option("--beta", dest="beta", type="float", default=0.157894736842, help="Memory decay value 0-5")
 parser.add_option("--condition", dest="condition", type="str", default='condition9', help="Which condition are we running for?")
 parser.add_option("--time", dest="time", type="int", default=24, help="With how many data points?")
 
 (options, args) = parser.parse_args()
 
 def assess_hyp(hypothesis, condition, currentTime):
+    hypothesis.ll_decay = options.beta
+
     data = make_data(condition, currentTime, options.alpha)
     hypothesis.compute_likelihood(data)
 
@@ -56,16 +59,6 @@ for i, space in enumerate(hypothesis_space):
             result = [s] + wrd
             result_strings.append(', '.join(str(j) for j in result))
             results.append(result)
-
-#if (currentLikelihood > maxLikelihood):
-#        maxLikelihood = currentLikelihood
-#        csvResult = result_strings
-#        pklResult = results
-
-#    result_strings = []
-#    results = []
-#    working_space = set()
-#    currentLikelihood = 0
 
 print "Writing csv file . . ."
 with open(options.out_path, 'a') as f:
