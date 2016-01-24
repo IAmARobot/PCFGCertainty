@@ -13,8 +13,8 @@ from optparse import OptionParser
 #    Option Parser
 #############################################################################################
 parser = OptionParser()
-parser.add_option("--alpha", dest="alpha", type="float", default=0.1, help="Reliability value 0-1")
-#parser.add_option("--beta", dest="beta", type="float", default=0.5, help="Memory decay value 0-5")
+parser.add_option("--alpha", dest="alpha", type="float", default=0.01, help="Reliability value (0-1]")
+#parser.add_option("--beta", dest="beta", type="float", default=0.05263158, help="Memory decay value 0-5")
 
 (options, args) = parser.parse_args()
 

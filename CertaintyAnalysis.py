@@ -13,8 +13,8 @@ parser.add_option("--read", dest="directory", type="string", help="Pickled resul
 parser.add_option("--pickle", dest="pkl_loc", type="string", help="Output a pkl", default=None)
 parser.add_option("--write", dest="out_path", type="string", help="Results csv", default="results.csv")
 
-parser.add_option("--alpha", dest="alpha", type="float", default=0.1, help="Reliability value (0-1]")
-parser.add_option("--beta", dest="beta", type="float", default=0.157894736842, help="Memory decay value 0-5")
+parser.add_option("--alpha", dest="alpha", type="float", default=0.01, help="Reliability value (0-1]")
+parser.add_option("--beta", dest="beta", type="float", default=0.05263158, help="Memory decay value 0-5")
 parser.add_option("--condition", dest="condition", type="str", default='condition9', help="Which condition are we running for?")
 parser.add_option("--time", dest="time", type="int", default=24, help="With how many data points?")
 
