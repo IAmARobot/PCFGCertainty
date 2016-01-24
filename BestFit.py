@@ -38,7 +38,7 @@ print "# Loaded behavioral data"
 
 data = dict()
 for condition in xrange(1, 11):
-    data[condition] = [make_data('condition' + str(condition), time, alpha=options.alpha) for time in xrange(24)]
+    data[condition] = [make_data('condition' + str(condition), time, alpha = options.alpha) for time in xrange(24)]
 print "# Constructed data"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,7 +47,7 @@ print "# Constructed data"
 # print "alpha beta pHumanData" # if you want a header
 
 #for alpha in numpy.linspace(0, 1, num = 10):
-for beta in numpy.linspace(0, 1, num = 20):
+for beta in numpy.linspace(0, 5, num = 100):
     print "# Starting", options.alpha, beta
 
     # Set the decays
