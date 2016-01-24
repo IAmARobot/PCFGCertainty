@@ -8,8 +8,8 @@ grammar = Grammar()
 
 grammar.add_rule('START', '', ['PREDICATE'], 1.0)
 
-#grammar.add_rule('START', '', True, 1.0)
-#grammar.add_rule('START', '', False, 1.0)
+grammar.add_rule('START', 'True', None, 1.0)
+grammar.add_rule('START', 'False', None, 1.0)
 
 # Logical Primitives
 grammar.add_rule('PREDICATE', 'and_', ['PREDICATE', 'PREDICATE'], 1.0)

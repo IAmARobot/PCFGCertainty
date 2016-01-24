@@ -65,7 +65,7 @@ for beta in numpy.linspace(0, 1, num = 20):
         d = data[condition]
 
         # compute the posterior using all previous data
-        for s in hs:
+        for h in hs:
             h.compute_posterior(d[0:trial]) # all previous data
 
         Z = logsumexp([h.posterior_score for h in hs])
