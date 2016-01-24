@@ -46,7 +46,6 @@ result_strings = []
 working_space = set()
 
 for i, space in enumerate(hypothesis_space):
-    print i
     working_space.update(space)
 
     for s, h in enumerate(working_space):
