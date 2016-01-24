@@ -299,9 +299,10 @@ condition10Answers = [0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0
 conditions = dict()
 
 for i in xrange(1, 11):
-    conditions['condition'+str(i)] = (eval('condition'+str(i)), eval('condition' + str(i) + 'Answers'))
+    conditions['condition' + str(i)] = (eval('condition' + str(i)), eval('condition' + str(i) + 'Answers'))
 
 def make_data(condition, time, alpha):
+    print conditions
     return FunctionData(input = [conditions[condition][0][time]],
                         output = conditions[condition][1][time],
                         alpha = alpha)
