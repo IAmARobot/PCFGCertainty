@@ -38,7 +38,7 @@ print "# Loaded behavioral data"
 
 data = dict()
 for condition in xrange(1, 11):
-    data[condition] = [ make_data('condition' + str(condition), time, alpha=options.alpha) for time in xrange(24)]
+    data[condition] = [make_data('condition' + str(condition), time, alpha=options.alpha) for time in xrange(24)]
 print "# Constructed data"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

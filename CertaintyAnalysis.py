@@ -34,7 +34,7 @@ def assess_hyp(hypothesis, condition, currentTime):
 
     acc = hypothesis(*datum.input) == datum.output
 
-    return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha]]
+    return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha, options.beta]]
 
 #############################################################################################
 #    MAIN CODE

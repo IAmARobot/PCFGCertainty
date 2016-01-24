@@ -302,7 +302,6 @@ for i in xrange(1, 11):
     conditions['condition' + str(i)] = (eval('condition' + str(i)), eval('condition' + str(i) + 'Answers'))
 
 def make_data(condition, time, alpha):
-    print time
     return FunctionData(input = [conditions[condition][0][time]],
                         output = conditions[condition][1][time],
                         alpha = alpha)
