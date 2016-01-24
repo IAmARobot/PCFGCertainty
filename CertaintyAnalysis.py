@@ -28,7 +28,7 @@ def assess_hyp(hypothesis, condition, currentTime):
 
     if currentTime < options.time:
         #print currentTime + 1
-        datum = make_data(condition, currentTime + 1, options.alpha)
+        datum = make_data(condition, currentTime, options.alpha)
     else:
         datum = data
 
