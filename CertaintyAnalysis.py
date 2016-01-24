@@ -24,7 +24,7 @@ def assess_hyp(hypothesis, condition, currentTime):
     hypothesis.ll_decay = options.beta
 
     data = make_data(condition, currentTime, options.alpha)
-    hypothesis.compute_likelihood(data)
+    hypothesis.compute_likelihood([data])
 
     if currentTime < options.time:
         datum = make_data(condition, currentTime + 1, options.alpha)[-1]
