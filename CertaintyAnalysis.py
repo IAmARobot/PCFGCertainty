@@ -27,6 +27,7 @@ def assess_hyp(hypothesis, condition, currentTime):
     hypothesis.compute_likelihood([data])
 
     if currentTime < options.time:
+        print currentTime + 1
         datum = make_data(condition, currentTime + 1, options.alpha)
     else:
         datum = data
