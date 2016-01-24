@@ -46,10 +46,11 @@ result_strings = []
 working_space = set()
 
 for i, space in enumerate(hypothesis_space):
+    print i
     working_space.update(space)
 
     for s, h in enumerate(working_space):
-        for wrd in assess_hyp(h, options.condition, i + 1):
+        for wrd in assess_hyp(h, options.condition, i):
             result = [s] + wrd
             result_strings.append(', '.join(str(j) for j in result))
             results.append(result)
