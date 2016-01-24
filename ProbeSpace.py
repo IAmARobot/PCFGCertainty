@@ -54,7 +54,7 @@ def run(data_pts):
 # Main Running
 ###################################################################################
 
-data = make_data(options.condition, options.time, options.alpha)
+data = [make_data(options.condition, options.time, options.alpha)]
 
 argarray = map(lambda x: [x], [data] * options.chains)
 
