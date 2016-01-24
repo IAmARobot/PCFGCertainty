@@ -3,7 +3,6 @@ import pickle
 from optparse import OptionParser
 from Data import make_data
 from Primitives import *
-from Hypothesis import *
 
 #############################################################################################
 #    Option Parser
@@ -16,7 +15,7 @@ parser.add_option("--write", dest="out_path", type="string", help="Results csv",
 parser.add_option("--alpha", dest="alpha", type="float", default=0.01, help="Reliability value (0-1]")
 parser.add_option("--beta", dest="beta", type="float", default=0.05263158, help="Memory decay value 0-5")
 parser.add_option("--condition", dest="condition", type="str", default='condition9', help="Which condition are we running for?")
-parser.add_option("--time", dest="time", type="int", default=24, help="With how many data points?")
+parser.add_option("--time", dest="time", type="int", default=0, help = "Current Time")
 
 (options, args) = parser.parse_args()
 
@@ -26,13 +25,7 @@ def assess_hyp(hypothesis, condition, currentTime):
     data = make_data(condition, currentTime, options.alpha)
     hypothesis.compute_likelihood([data])
 
-    if currentTime < options.time:
-        #print currentTime + 1
-        datum = make_data(condition, currentTime, options.alpha)
-    else:
-        datum = data
-
-    acc = hypothesis(*datum.input) == datum.output
+    acc = hypothesis(*data.input) == data.output
 
     return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha, options.beta]]
 
