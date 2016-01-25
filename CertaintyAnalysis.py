@@ -23,11 +23,16 @@ def assess_hyp(hypothesis, condition, currentTime):
     hypothesis.ll_decay = options.beta
 
     data = make_data(condition, currentTime, options.alpha)
-    hypothesis.compute_likelihood([data])
+    likelihood = hypothesis.compute_likelihood([data])
+
+    print "Start"
+    print likelihood
+    print hypothesis.get_cumulative_likelihoods()[currentTime]
+    print "End"
 
     acc = hypothesis(*data.input) == data.output
 
-    return [[condition, currentTime, hypothesis.prior, hypothesis.get_cumulative_likelihoods[currentTime], acc, options.alpha, options.beta]]
+    return [[condition, currentTime, hypothesis.prior, likelihood, acc, options.alpha, options.beta]]
 
 #############################################################################################
 #    MAIN CODE
