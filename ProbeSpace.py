@@ -23,7 +23,7 @@ parser.add_option("--top", dest="top_count", type="int", default=1000, help="Top
 parser.add_option("--chains", dest="chains", type="int", default=1,
                   help="Number of chains to run (new data set for each chain)")
 
-parser.add_option("--alpha", dest="alpha", type="float", default=0.45, help="Reliability value (0-1]")
+parser.add_option("--alpha", dest="alpha", type="float", default=0.407, help="Reliability value (0-1]")
 parser.add_option("--beta", dest="beta", type="float", default=0, help="Memory decay value 0-5")
 parser.add_option("--condition", dest="condition", type="str", default='condition9', help="Which condition are we running for?")
 parser.add_option("--time", dest="time", type="int", default=24, help="With how many data points?")
