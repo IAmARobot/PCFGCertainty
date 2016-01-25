@@ -1,68 +1,84 @@
 import os
 import pickle
-from optparse import OptionParser
 from Data import make_data
+from LOTlib.Miscellaneous import logsumexp
 from Primitives import *
+from Hypothesis import *
+import numpy
+import pandas
+import math
+from optparse import OptionParser
 
 #############################################################################################
 #    Option Parser
 #############################################################################################
 parser = OptionParser()
-parser.add_option("--read", dest="directory", type="string", help="Pickled results", default="Data/Baseline.pkl")
-parser.add_option("--pickle", dest="pkl_loc", type="string", help="Output a pkl", default=None)
-parser.add_option("--write", dest="out_path", type="string", help="Results csv", default="results.csv")
-
 parser.add_option("--alpha", dest="alpha", type="float", default=0.45, help="Reliability value (0-1]")
 parser.add_option("--beta", dest="beta", type="float", default=0, help="Memory decay value 0-5")
-parser.add_option("--condition", dest="condition", type="str", default='condition9', help="Which condition are we running for?")
-parser.add_option("--time", dest="time", type="int", default=0, help = "Current Time")
+parser.add_option("--condition", dest="condition", type="int", default='1', help="Which condition are we running for?")
 
 (options, args) = parser.parse_args()
-
-def assess_hyp(hypothesis, condition, currentTime):
-    hypothesis.ll_decay = options.beta
-
-    data = make_data(condition, currentTime, options.alpha)
-    likelihood = hypothesis.compute_likelihood([data])
-
-    print "Start"
-    print likelihood
-    print hypothesis.stored_likelihood
-    print "End"
-
-    acc = hypothesis(*data.input) == data.output
-
-    return [[condition, currentTime, hypothesis.prior, likelihood, acc, options.alpha, options.beta]]
 
 #############################################################################################
 #    MAIN CODE
 #############################################################################################
-print "Loading hypothesis space . . ."
-hypothesis_space = []
 
-for i in os.listdir(options.directory):
-    with open(options.directory + i, 'r') as f:
-        hypothesis_space.append(pickle.load(f))
+# Populate hypothesis space for each condition
+# Let's make a single set, the union of the sets over time
+hypothesis_space = dict()
 
-print "Assessing hypotheses . . ."
-results = []
-result_strings = []
+hypothesis_space[options.condition] = set()
 
-working_space = set()
+for i in os.listdir("Data/condition" + str(options.condition)):
+    with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
+        hypothesis_space[options.condition].update(pickle.load(f))
 
-for i, space in enumerate(hypothesis_space):
-    working_space.update(space)
+print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
-    for s, h in enumerate(working_space):
-        for wrd in assess_hyp(h, options.condition, i):
-            result = [s] + wrd
-            result_strings.append(', '.join(str(j) for j in result))
-            results.append(result)
+behavioralData = pandas.read_csv('behavioralAccuracyCounts.csv')
+print "# Loaded behavioral data"
 
-print "Writing csv file . . ."
-with open(options.out_path, 'a') as f:
-    f.write('\n'.join(result_strings) + '\n')
+data = dict()
 
-if options.pkl_loc is not None:
-    with open(options.pkl_loc, 'w') as f:
-        pickle.dump(results, f)
+data[options.condition] = [make_data('condition' + str(options.condition), time, alpha = options.alpha) for time in xrange(24)]
+
+print "# Constructed data"
+
+for hs in hypothesis_space.values():
+    for h in hs:
+        h.ll_decay = options.beta
+
+pHumanData = 0.0
+
+for row in behavioralData.itertuples():
+    condition, trial, number_inaccurate, number_accurate = row[1:5]
+    if condition not in hypothesis_space: continue
+
+    hs = hypothesis_space[condition]
+    d = data[condition]
+
+    # compute the posterior using all previous data
+    for h in hs:
+        h.compute_posterior(d[0:trial]) # all previous data
+
+    Z = logsumexp([h.posterior_score for h in hs])
+
+    # compute the predicted probability of being accurate
+    hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial].input) == d[trial].output])
+    assert 0.0 <= hyp_accuracy <= 1.0
+
+    # mix to in the alpha (again) to account for the noise assumed in the model
+    predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * 0.5
+
+    # compute the probability of the observed responses given the model prediction
+    pHumanData += log(predicted_accuracy) * number_accurate + log(1.0 - predicted_accuracy) * number_inaccurate
+
+    hypPs = [math.exp(h.posterior_score - Z) for h in hs]
+    entropy = sum([p * log(p) for p in hypPs])
+
+    #return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha]]
+
+    with open('hypotheses.csv', 'a') as f:
+        f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
+                str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
+                str(entropy) + ',' + str(pHumanData) + '\n')

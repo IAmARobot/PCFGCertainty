@@ -80,6 +80,10 @@ for beta in numpy.linspace(0, .05, num = 10):
         # compute the probability of the observed responses given the model prediction
         pHumanData += log(predicted_accuracy) * number_accurate + log(1.0 - predicted_accuracy) * number_inaccurate
 
+        hypPs = [math.exp(h.posterior_score - Z) for h in hs]
+        entropy = sum([p * log(p) for p in hypPs])
+        print condition, trial, number_accurate, number_inaccurate, hyp_accuracy, predicted_accuracy, entropy
+
     print options.alpha, beta, pHumanData
 
     with open('bestFits.csv', 'a') as f:
