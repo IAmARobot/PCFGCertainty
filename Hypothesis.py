@@ -8,7 +8,18 @@ class MyHypothesis(PowerLawDecayed, LOTHypothesis):
         LOTHypothesis.__init__(self, grammar=grammar, display="lambda IMG: %s", **kwargs)
 
     def compute_single_likelihood(self, datum, **kwargs):
+        print "Start"
+        print self(*datum.input)
+        print datum.output
+        print datum.alpha
+        print (self(*datum.input) == datum.output)
+        print datum.alpha * (self(*datum.input) == datum.output)
+        print datum.alpha * (self(*datum.input) == datum.output) + (1.0 - datum.alpha) / 2.0
+
         ll = log(datum.alpha * (self(*datum.input) == datum.output) + (1.0 - datum.alpha) / 2.0)
+
+        print ll
+        print "End"
 
         return ll
 

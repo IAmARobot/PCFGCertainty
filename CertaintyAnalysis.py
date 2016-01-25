@@ -27,8 +27,6 @@ def assess_hyp(hypothesis, condition, currentTime):
 
     acc = hypothesis(*data.input) == data.output
 
-    print hypothesis.likelihood
-
     return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha, options.beta]]
 
 #############################################################################################
