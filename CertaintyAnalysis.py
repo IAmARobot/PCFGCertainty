@@ -26,8 +26,7 @@ def assess_hyp(hypothesis, condition, currentTime):
     likelihood = hypothesis.compute_likelihood([data])
 
     print "Start"
-    print likelihood
-    print hypothesis.get_cumulative_likelihoods()[currentTime]
+    print hypothesis.stored_likelihood
     print "End"
 
     acc = hypothesis(*data.input) == data.output
