@@ -47,7 +47,7 @@ print "# Constructed data"
 # print "alpha beta pHumanData" # if you want a header
 
 #for alpha in numpy.linspace(0, 1, num = 10):
-for beta in numpy.linspace(0, 1, num = 10):
+for beta in numpy.linspace(0, .01, num = 10):
     print "# Starting", options.alpha, beta
 
     # Set the decays
