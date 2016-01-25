@@ -27,7 +27,7 @@ def assess_hyp(hypothesis, condition, currentTime):
 
     acc = hypothesis(*data.input) == data.output
 
-    return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha, options.beta]]
+    return [[condition, currentTime, hypothesis.prior, hypothesis.get_cumulative_likelihoods[currentTime], acc, options.alpha, options.beta]]
 
 #############################################################################################
 #    MAIN CODE
