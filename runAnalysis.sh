@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rm Data/hypotheses.csv
+rm modelData.csv
 
 for condition in 1 2 3 4 5 6 7 8 9 10
 do

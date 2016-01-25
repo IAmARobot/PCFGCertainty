@@ -78,7 +78,7 @@ for row in behavioralData.itertuples():
 
     #return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha]]
 
-    with open('hypotheses.csv', 'a') as f:
+    with open('modelData.csv', 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
                 str(entropy) + ',' + str(pHumanData) + '\n')
