@@ -2,6 +2,7 @@ from math import log
 from LOTlib.Hypotheses.LOTHypothesis import LOTHypothesis
 from LOTlib.Hypotheses.Likelihoods.PowerLawDecayed import PowerLawDecayed
 from Grammar import grammar
+from LOTlib.Miscellaneous import attrmem
 
 class MyHypothesis(PowerLawDecayed, LOTHypothesis):
     def __init__(self, **kwargs):
@@ -12,8 +13,9 @@ class MyHypothesis(PowerLawDecayed, LOTHypothesis):
 
         return ll
 
-    def compute_prior(self):
-        return 0
+    @attrmem('posterior_no_prior')
+    def compute_posterior_no_prior(self, d, **kwargs):
+        return self.compute_likelihood(d, **kwargs)
 
 def make_hypothesis(**kwargs):
     return MyHypothesis(**kwargs)
