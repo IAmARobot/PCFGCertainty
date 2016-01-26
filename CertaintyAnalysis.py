@@ -63,7 +63,7 @@ for row in behavioralData.itertuples():
     for h in hs:
         h.compute_posterior(d[0:trial]) # all previous data
 
-        if (h.posterior_score > highestPosterior):
+        if (h.posterior_score < highestPosterior):
             highestPosterior = h.posterior_score
 
     Z = logsumexp([h.posterior_score for h in hs])
