@@ -89,6 +89,10 @@ for row in behavioralData.itertuples():
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
     entropy = sum([p * log(p) for p in hypPs])
 
+    highestPosterior -= Z
+
+    highestPosteriorNoPrior -= Z
+
     with open('modelData.csv', 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
