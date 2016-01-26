@@ -50,16 +50,21 @@ for hs in hypothesis_space.values():
 
 pHumanData = 0.0
 
+# Iterate through each trial for all conditions
 for row in behavioralData.itertuples():
     condition, trial, number_inaccurate, number_accurate = row[1:5]
     if condition not in hypothesis_space: continue
 
     hs = hypothesis_space[condition]
     d = data[condition]
+    highestPosterior = 0
 
     # compute the posterior using all previous data
     for h in hs:
         h.compute_posterior(d[0:trial]) # all previous data
+
+        if (h.posterior_score > highestPosterior):
+            highestPosterior = h.posterior_score
 
     Z = logsumexp([h.posterior_score for h in hs])
 
@@ -76,9 +81,7 @@ for row in behavioralData.itertuples():
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
     entropy = sum([p * log(p) for p in hypPs])
 
-    #return [[condition, currentTime, hypothesis.prior, hypothesis.likelihood, acc, options.alpha]]
-
     with open('modelData.csv', 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
-                str(entropy) + ',' + str(pHumanData) + '\n')
+                str(entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + '\n')
