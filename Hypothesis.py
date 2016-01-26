@@ -12,5 +12,8 @@ class MyHypothesis(PowerLawDecayed, LOTHypothesis):
 
         return ll
 
+    def compute_prior(self):
+        return 0
+
 def make_hypothesis(**kwargs):
     return MyHypothesis(**kwargs)
