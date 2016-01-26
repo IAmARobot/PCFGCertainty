@@ -54,6 +54,7 @@ pHumanData = 0.0
 for row in behavioralData.itertuples():
     condition, trial, number_inaccurate, number_accurate = row[1:5]
     if condition not in hypothesis_space: continue
+    print trial
 
     hs = hypothesis_space[condition]
     d = data[condition]
