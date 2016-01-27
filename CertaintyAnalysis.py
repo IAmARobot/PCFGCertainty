@@ -57,24 +57,21 @@ for row in behavioralData.itertuples():
 
     hs = hypothesis_space[condition]
     d = data[condition]
-    highestPosterior = 0
-    highestPosteriorNoPrior = 0
-
-    # compute the posterior with no prior
-    for h in hs:
-        h.compute_posterior_no_prior(d[0:trial]) # all previous data
-
-        if (h.posterior_no_prior < highestPosteriorNoPrior):
-            highestPosteriorNoPrior = h.posterior_no_prior
+    highestPosterior = -Infinity
+    highestLikelihood = -Infinity
 
     # compute the posterior using all previous data
     for h in hs:
         h.compute_posterior(d[0:trial]) # all previous data
 
-        if (h.posterior_score < highestPosterior):
+        if (h.likelihood > highestLikelihood):
+            highestLikelihood = h.likelihood
+
+        if (h.posterior_score > highestPosterior):
             highestPosterior = h.posterior_score
 
     Z = logsumexp([h.posterior_score for h in hs])
+    Zml = logsumexp([h.likelihood for h in hs])
 
     # compute the predicted probability of being accurate
     hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial].input) == d[trial].output])
@@ -91,10 +88,12 @@ for row in behavioralData.itertuples():
 
     highestPosterior = math.exp(highestPosterior - Z)
 
-    highestPosteriorNoPrior = math.exp(highestPosteriorNoPrior - Z)
+    highestLikelihood = math.exp(highestLikelihood - Zml)
 
     with open('modelData.csv', 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
                 str(entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
-                str(highestPosteriorNoPrior) + '\n')
+                str(highestLikelihood) + '\n')
+
+    print "Done"
