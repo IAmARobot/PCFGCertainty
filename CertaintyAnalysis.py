@@ -54,7 +54,6 @@ pHumanData = 0.0
 for row in behavioralData.itertuples():
     condition, trial, number_inaccurate, number_accurate = row[1:5]
     if condition not in hypothesis_space: continue
-    print trial
 
     hs = hypothesis_space[condition]
     d = data[condition]
@@ -90,9 +89,9 @@ for row in behavioralData.itertuples():
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
     entropy = sum([p * log(p) for p in hypPs])
 
-    highestPosterior -= Z
+    highestPosterior = math.exp(highestPosterior - Z)
 
-    highestPosteriorNoPrior -= Z
+    highestPosteriorNoPrior = math.exp(highestPosteriorNoPrior - Z)
 
     with open('modelData.csv', 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
