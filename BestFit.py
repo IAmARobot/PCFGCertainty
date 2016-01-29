@@ -33,7 +33,7 @@ for condition in xrange(1, 11):
             hypothesis_space[condition].update(pickle.load(f))
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
-behavioralData = pandas.read_csv('behavioralAccuracyCounts.csv')
+behavioralData = pandas.read_csv('counts.csv')
 print "# Loaded behavioral data"
 
 data = dict()
@@ -47,7 +47,7 @@ print "# Constructed data"
 # print "alpha beta pHumanData" # if you want a header
 
 #for alpha in numpy.linspace(0, 1, num = 10):
-for beta in numpy.linspace(0, .01, num = 10):
+for beta in numpy.linspace(0, 5, num = 20):
     print "# Starting", options.alpha, beta
 
     # Set the decays
@@ -58,7 +58,7 @@ for beta in numpy.linspace(0, .01, num = 10):
     pHumanData = 0.0
 
     for row in behavioralData.itertuples():
-        condition, trial, number_inaccurate, number_accurate = row[1:5]
+        condition, trial, number_accurate, number_inaccurate = row[1:5]
         if condition not in hypothesis_space: continue
 
         hs = hypothesis_space[condition]
@@ -71,7 +71,7 @@ for beta in numpy.linspace(0, .01, num = 10):
         Z = logsumexp([h.posterior_score for h in hs])
 
         # compute the predicted probability of being accurate
-        hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial].input) == d[trial].output])
+        hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial - 1].input) == d[trial - 1].output])
         assert 0.0 <= hyp_accuracy <= 1.0
 
         # mix to in the alpha (again) to account for the noise assumed in the model
