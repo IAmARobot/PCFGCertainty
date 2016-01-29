@@ -74,7 +74,7 @@ for row in behavioralData.itertuples():
     Zml = logsumexp([h.likelihood for h in hs])
 
     # compute the predicted probability of being accurate
-    hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial].input) == d[trial].output])
+    hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial - 1].input) == d[trial - 1].output])
     assert 0.0 <= hyp_accuracy <= 1.0
 
     # mix to in the alpha (again) to account for the noise assumed in the model
