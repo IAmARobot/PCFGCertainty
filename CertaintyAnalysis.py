@@ -35,7 +35,7 @@ for i in os.listdir("Data/condition" + str(options.condition)):
 
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
-behavioralData = pandas.read_csv('behavioralAccuracyCounts.csv')
+behavioralData = pandas.read_csv('counts.csv')
 print "# Loaded behavioral data"
 
 data = dict()
@@ -52,7 +52,7 @@ pHumanData = 0.0
 
 # Iterate through each trial for all conditions
 for row in behavioralData.itertuples():
-    condition, trial, number_inaccurate, number_accurate = row[1:5]
+    condition, trial, number_accurate, number_inaccurate  = row[1:5]
     if condition not in hypothesis_space: continue
 
     hs = hypothesis_space[condition]
