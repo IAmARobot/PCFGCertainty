@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for alpha in .51 .52 .53 .54 .55 .56 .57 .58 .59 .61 .62 .63 .64 .65 .66 .67 .68 .69
+for alpha in .60 .605 .610 .620 .625 .630 .635 .640 .645 .650 .655 .660 .665 .670 .675 .680 .685 .690
 do
     mpirun -np 2 python BestFit.py --alpha $alpha &
 done
