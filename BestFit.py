@@ -27,10 +27,12 @@ parser.add_option("--alpha", dest="alpha", type="float", default=0.01, help="Rel
 hypothesis_space = dict()
 for condition in xrange(1, 11):
     hypothesis_space[condition] = set()
+
     for i in os.listdir("Data/condition" + str(condition)):
         print "# Loading ", i
         with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
             hypothesis_space[condition].update(pickle.load(f))
+
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
 behavioralData = pandas.read_csv('counts.csv')
@@ -39,6 +41,7 @@ print "# Loaded behavioral data"
 data = dict()
 for condition in xrange(1, 11):
     data[condition] = [make_data('condition' + str(condition), time, alpha = options.alpha) for time in xrange(24)]
+
 print "# Constructed data"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,7 +50,7 @@ print "# Constructed data"
 # print "alpha beta pHumanData" # if you want a header
 
 #for alpha in numpy.linspace(0, 1, num = 10):
-for beta in numpy.linspace(0, 1, num = 5):
+for beta in numpy.linspace(0, .3, num = 31):
     print "# Starting", options.alpha, beta
 
     # Set the decays
@@ -59,6 +62,7 @@ for beta in numpy.linspace(0, 1, num = 5):
 
     for row in behavioralData.itertuples():
         condition, trial, number_accurate, number_inaccurate = row[1:5]
+
         if condition not in hypothesis_space: continue
 
         hs = hypothesis_space[condition]
