@@ -16,6 +16,7 @@ parser = OptionParser()
 parser.add_option("--alpha", dest="alpha", type="float", default=0.64, help="Reliability value (0-1]")
 parser.add_option("--beta", dest="beta", type="float", default=0, help="Memory decay value 0-5")
 parser.add_option("--condition", dest="condition", type="int", default='1', help="Which condition are we running for?")
+parser.add_option("-s", action = "store_true", dest = "isOneShot", help = "Is this a single trial experiment?")
 
 (options, args) = parser.parse_args()
 
@@ -30,8 +31,12 @@ hypothesis_space = dict()
 hypothesis_space[options.condition] = set()
 
 for i in os.listdir("Data/condition" + str(options.condition)):
-    with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
-        hypothesis_space[options.condition].update(pickle.load(f))
+    if (i == "/condition" + str(options.condition) + "_8.pkl"):
+        with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
+            hypothesis_space[options.condition].update(pickle.load(f))
+    elif (not options.isOneShot):
+        with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
+            hypothesis_space[options.condition].update(pickle.load(f))
 
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
