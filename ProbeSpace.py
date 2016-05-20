@@ -15,21 +15,19 @@ from Data import make_data
 #   Option Parser
 ######################################################################################################
 parser = OptionParser()
-parser.add_option("--out", dest="out_path", type="string",
-                  help="Output file (a pickle of FiniteBestSet)", default="hypspace.pkl")
+parser.add_option("--out", dest = "out_path", type = "string", help = "Output file (a pickle of FiniteBestSet)", default = "hypspace.pkl")
 
-parser.add_option("--steps", dest="steps", type="int", default=1000000, help="Number of samples to run")
-parser.add_option("--top", dest="top_count", type="int", default=1000, help="Top number of hypotheses to store")
-parser.add_option("--chains", dest="chains", type="int", default=1,
-                  help="Number of chains to run (new data set for each chain)")
+parser.add_option("--steps", dest = "steps", type = "int", default = 1000000, help = "Number of samples to run")
+parser.add_option("--top", dest = "top_count", type = "int", default = 1000, help = "Top number of hypotheses to store")
+parser.add_option("--chains", dest = "chains", type = "int", default = 1, help = "Number of chains to run (new data set for each chain)")
 
-parser.add_option("--alpha", dest="alpha", type="float", default=0.64, help="Reliability value (0-1]")
-parser.add_option("--beta", dest="beta", type="float", default=0, help="Memory decay value 0-5")
-parser.add_option("--condition", dest="condition", type="str", default='condition9', help="Which condition are we running for?")
-parser.add_option("--time", dest="time", type="int", default=24, help="With how many data points?")
+parser.add_option("--alpha", dest = "alpha", type = "float", default = 0.64, help = "Reliability value (0-1]")
+parser.add_option("--beta", dest = "beta", type = "float", default = 0, help = "Memory decay value 0-5")
+parser.add_option("--condition", dest = "condition", type = "str", default = 'condition9', help = "Which condition are we running for?")
+parser.add_option("--time", dest = "time", type = "int", default = 24, help = "With how many data points?")
 
-parser.add_option("--llt", dest="llt", type="float", default=1.0, help="Likelihood temperature")
-parser.add_option("--pt", dest="prior_temp", type="float", default=1.0, help="Prior temperature")
+parser.add_option("--llt", dest = "llt", type = "float", default = 1.0, help = "Likelihood temperature")
+parser.add_option("--pt", dest = "prior_temp", type = "float", default = 1.0, help = "Prior temperature")
 
 (options, args) = parser.parse_args()
 
