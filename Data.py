@@ -325,4 +325,4 @@ def make_data(condition, time, alpha):
                         alpha = alpha)
 
 if __name__ == "__main__":
-    print make_data('condition10', 24, 0.9)
+    print make_data('condition10', 23, 0.9)

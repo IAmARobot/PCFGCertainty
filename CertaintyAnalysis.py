@@ -45,7 +45,12 @@ print "# Loaded behavioral data"
 
 data = dict()
 
-data[options.condition] = [make_data('condition' + str(options.condition), time, alpha = options.alpha) for time in xrange(24)]
+if options.isOneShot:
+    data[options.condition] = [make_data('condition' + str(options.condition), time, alpha=options.alpha) for time in
+                               xrange(8)]
+else:
+    data[options.condition] = [make_data('condition' + str(options.condition), time, alpha=options.alpha) for time in
+                               xrange(24)]
 
 print "# Constructed data"
 
