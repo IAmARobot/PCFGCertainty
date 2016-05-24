@@ -258,66 +258,44 @@ condition10 = [
                          "RED_SQUARE_LARGE"
                         ]
 
-generalization = ["GREEN_TRIANGLE_LARGE",
-                  "RED_SQUARE_LARGE",
-                  "GREEN_TRIANGLE_SMALL",
-                  "GREEN_SQUARE_SMALL",
-                  "RED_TRIANGLE_SMALL",
-                  "RED_SQUARE_SMALL",
-                  "RED_TRIANGLE_LARGE",
-                  "GREEN_SQUARE_LARGE"]
-
 # RED AND SMALL
 condition1Answers = [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0]
-oneShotCondition1Answers = [1, 0, 1, 0, 0, 0, 0, 0]
 
 # RED OR SMALL
 condition2Answers = [1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1]
-oneShotCondition2Answers = [1, 1, 1, 0, 1, 1, 0, 1]
 
 # RED
 condition3Answers = [0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1]
-oneShotCondition3Answers = [0, 1, 0, 1, 0, 0, 1, 1]
 
 # RED XOR SMALL
 condition4Answers = [1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0]
-oneShotCondition4Answers = [1, 1, 1, 1, 0, 1, 1, 0]
 
 # RED AND SMALL OR GREEN AND Large
 condition5Answers = [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1]
-oneShotCondition5Answers = [1, 0, 1, 1, 0, 1, 0, 0]
 
 # (GREEN AND Large AND TRIANGLE) OR (GREEN AND Large AND SQUARE) OR
 # (GREEN AND SMALL AND TRIANGLE) OR (RED AND Large AND SQUARE)
 condition6Answers = [0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1]
-oneShotCondition6Answers = [0, 1, 1, 1, 1, 0, 0, 0]
 
 # (GREEN AND Large AND TRIANGLE) OR (GREEN AND Large AND SQUARE) OR
 # (GREEN AND SMALL AND TRIANGLE) OR (RED AND Large AND TRIANGLE)
 condition7Answers = [1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0]
-oneShotCondition7Answers = [1, 1, 1, 0, 0, 0, 1, 0]
 
 # (GREEN AND Large AND TRIANGLE) OR (GREEN AND Large AND SQUARE) OR
 # (GREEN AND SMALL AND TRIANGLE) OR (RED AND SMALL AND SQUARE)
 condition8Answers = [1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1]
-oneShotCondition8Answers = [1, 0, 0, 1, 1, 0, 0, 1]
 
 # (GREEN AND Large AND TRIANGLE) OR (GREEN AND SMALL AND SQUARE) OR
 # (RED AND Large AND SQUARE) OR (RED AND SMALL AND TRIANGLE)
 condition9Answers = [1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0]
-oneShotCondition9Answers = [1, 1, 0, 1, 0, 0, 1, 0]
 
 # RED XOR SMALL XOR SQUARE
 condition10Answers = [0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0]
-oneShotCondition10Answers = [0, 0, 1, 0, 0, 1, 1, 0]
 
 conditions = dict()
 
 for i in xrange(1, 11):
-    if True:
-        conditions['condition' + str(i)] = (eval('condition' + str(i)), eval('condition' + str(i) + 'Answers'))
-    else:
-        conditions['condition' + str(i)] = (generalization, eval('oneShotCondition' + str(i) + 'Answers'))
+    conditions['condition' + str(i)] = (eval('condition' + str(i)), eval('condition' + str(i) + 'Answers'))
 
 def make_data(condition, time, alpha):
     return FunctionData(input = [conditions[condition][0][time]],
