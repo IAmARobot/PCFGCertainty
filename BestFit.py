@@ -30,12 +30,12 @@ for condition in xrange(1, 11):
     hypothesis_space[condition] = set()
 
     for i in os.listdir("Data/condition" + str(condition)):
-        if (i == "/condition" + str(options.condition) + "_8.pkl"):
-            with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
-                hypothesis_space[options.condition].update(pickle.load(f))
+        if (i == "/condition" + str(condition) + "_8.pkl"):
+            with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
+                hypothesis_space[condition].update(pickle.load(f))
         elif (not options.isOneShot):
-            with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
-                hypothesis_space[options.condition].update(pickle.load(f))
+            with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
+                hypothesis_space[condition].update(pickle.load(f))
 
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
