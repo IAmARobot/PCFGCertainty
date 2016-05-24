@@ -31,7 +31,7 @@ hypothesis_space = dict()
 hypothesis_space[options.condition] = set()
 
 for i in os.listdir("Data/condition" + str(options.condition)):
-    if (i == "/condition" + str(options.condition) + "_8.pkl"):
+    if (i == "condition" + str(options.condition) + "_8.pkl"):
         with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
             hypothesis_space[options.condition].update(pickle.load(f))
     elif (not options.isOneShot):
