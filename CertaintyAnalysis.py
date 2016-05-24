@@ -4,7 +4,6 @@ from Data import make_data
 from LOTlib.Miscellaneous import logsumexp, Infinity
 from Primitives import *
 from Hypothesis import *
-import numpy
 import pandas
 import math
 from optparse import OptionParser
