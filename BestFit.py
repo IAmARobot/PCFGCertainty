@@ -15,6 +15,7 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--alpha", dest="alpha", type="float", default=0.01, help="Reliability value (0-1]")
 #parser.add_option("--beta", dest="beta", type="float", default=0.05263158, help="Memory decay value 0-5")
+parser.add_option("-s", action = "store_true", dest = "isOneShot", help = "Is this a single trial experiment?")
 
 (options, args) = parser.parse_args()
 
@@ -29,9 +30,12 @@ for condition in xrange(1, 11):
     hypothesis_space[condition] = set()
 
     for i in os.listdir("Data/condition" + str(condition)):
-        print "# Loading ", i
-        with open("Data/condition" + str(condition) + '/' +  i, 'r') as f:
-            hypothesis_space[condition].update(pickle.load(f))
+        if (i == "/condition" + str(options.condition) + "_8.pkl"):
+            with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
+                hypothesis_space[options.condition].update(pickle.load(f))
+        elif (not options.isOneShot):
+            with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
+                hypothesis_space[options.condition].update(pickle.load(f))
 
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
@@ -39,8 +43,14 @@ behavioralData = pandas.read_csv('counts.csv')
 print "# Loaded behavioral data"
 
 data = dict()
+
+if options.isOneShot:
+    range = 8
+else:
+    range = 24
+
 for condition in xrange(1, 11):
-    data[condition] = [make_data('condition' + str(condition), time, alpha = options.alpha) for time in xrange(24)]
+    data[condition] = [make_data('condition' + str(condition), time, alpha = options.alpha) for time in xrange(range)]
 
 print "# Constructed data"
 
@@ -70,7 +80,10 @@ for beta in numpy.linspace(0, .3, num = 31):
 
         # compute the posterior using all previous data
         for h in hs:
-            h.compute_posterior(d[0:trial]) # all previous data
+            if (not options.isOneShot):
+                h.compute_posterior(d[0:trial]) # all previous data
+            else:
+                h.compute_posterior(d[0:8])
 
         Z = logsumexp([h.posterior_score for h in hs])
 

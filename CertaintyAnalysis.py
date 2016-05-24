@@ -46,11 +46,11 @@ print "# Loaded behavioral data"
 data = dict()
 
 if options.isOneShot:
-    data[options.condition] = [make_data('condition' + str(options.condition), time, alpha=options.alpha) for time in
-                               xrange(8)]
+    range = 8
 else:
-    data[options.condition] = [make_data('condition' + str(options.condition), time, alpha=options.alpha) for time in
-                               xrange(24)]
+    range = 24
+
+data[options.condition] = [make_data('condition' + str(options.condition), time, alpha = options.alpha) for time in xrange(range)]
 
 print "# Constructed data"
 
@@ -72,7 +72,10 @@ for row in behavioralData.itertuples():
 
     # compute the posterior using all previous data
     for h in hs:
-        h.compute_posterior(d[0:trial]) # all previous data
+        if (not options.isOneShot):
+            h.compute_posterior(d[0:trial]) # all previous data
+        else:
+            h.compute_posterior(d[0:8])
 
         if (h.likelihood > highestLikelihood):
             highestLikelihood = h.likelihood
