@@ -108,4 +108,4 @@ for row in behavioralData.itertuples():
                 str(entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
                 str(highestLikelihood) + '\n')
 
-    print "Done"
+print "Done"

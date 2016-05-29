@@ -101,3 +101,5 @@ for beta in numpy.linspace(0, .3, num = 31):
 
     with open('bestFits.csv', 'a') as f:
         f.write(str(options.alpha) + ',' + str(beta) + ',' + str(pHumanData) + ',' + '\n')
+
+print "Done"
