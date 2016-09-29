@@ -1,12 +1,14 @@
 import os
 import pickle
-from Data import make_data
+from Data import make_data, uniqueStimuli
 from LOTlib.Miscellaneous import logsumexp, Infinity
 from Primitives import *
 from Hypothesis import *
 import pandas
 import math
 from optparse import OptionParser
+import itertools
+import numpy
 
 #############################################################################################
 #    Option Parser
@@ -57,19 +59,31 @@ for hs in hypothesis_space.values():
     for h in hs:
         h.ll_decay = options.beta
 
-pHumanData = 0.0
+previousEntropy = 0
+previousDomainEntropy = 0
+previousHypPs = []
+previousDataPs = []
+responseMatrix = []
+
+hs = hypothesis_space[options.condition]
+d = data[options.condition]
+
+for h in hs:
+    for o in uniqueStimuli:
+        responseMatrix.append(h(o))
 
 # Iterate through each trial for all conditions
 for row in behavioralData.itertuples():
     condition, trial, number_accurate, number_inaccurate  = row[1:5]
     if condition not in hypothesis_space: continue
 
-    hs = hypothesis_space[condition]
-    d = data[condition]
+    crossEntropy = 0
+    domainCrossEntropy = 0
+
     highestPosterior = -Infinity
     highestLikelihood = -Infinity
 
-    # compute the posterior using all previous data
+    # compute the posterior
     for h in hs:
         if (not options.isOneShot):
             h.compute_posterior(d[0:trial]) # all previous data
@@ -87,25 +101,44 @@ for row in behavioralData.itertuples():
 
     # compute the predicted probability of being accurate
     hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial - 1].input) == d[trial - 1].output])
-    assert 0.0 <= hyp_accuracy <= 1.0
+    assert 0 <= hyp_accuracy <= 1
 
     # mix to in the alpha (again) to account for the noise assumed in the model
-    predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * 0.5
+    predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * .5
 
     # compute the probability of the observed responses given the model prediction
-    pHumanData += log(predicted_accuracy) * number_accurate + log(1.0 - predicted_accuracy) * number_inaccurate
+    pHumanData = log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
+    dataPs = [numpy.dot(h, responseMatrix) for h in hs]
+
+
     entropy = sum([p * log(p) for p in hypPs])
+    domainEntropy = sum(dataPs * log(dataPs))
+
+    changeInEntropy = entropy - previousEntropy
+    changeInDomainEntropy = domainEntropy - previousDomainEntropy
+
+    if previousHypPs:
+        for p, p2 in itertools.izip(hypPs, previousHypPs):
+            crossEntropy += p * log(p / p2)
+
+    if previousDataPs:
+        for p, p2 in itertools.izip(dataPs, previousDataPs):
+            domainCrossEntropy += p * log(p / p2)
 
     highestPosterior = math.exp(highestPosterior - Z)
-
     highestLikelihood = math.exp(highestLikelihood - Zml)
+
+    previousEntropy = entropy
+    previousDomainEntropy = domainEntropy
+    previousHypPs = hypPs
 
     with open('modelData.csv', 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
-                str(entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
-                str(highestLikelihood) + '\n')
+                str(-entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
+                str(highestLikelihood) + str(-changeInEntropy) + str(-crossEntropy) +
+                str(-domainEntropy) + str(-changeInDomainEntropy) + str(-domainCrossEntropy) + '\n')
 
 print "Done"

@@ -1,5 +1,14 @@
 from LOTlib.DataAndObjects import FunctionData
 
+uniqueStimuli = ["RED_SQUARE_SMALL",
+                 "RED_SQUARE_LARGE",
+                 "RED_TRIANGLE_SMALL",
+                 "GREEN_TRIANGLE_SMALL",
+                 "GREEN_SQUARE_LARGE",
+                 "RED_TRIANGLE_LARGE",
+                 "GREEN_SQUARE_SMALL",
+                 "GREEN_TRIANGLE_LARGE"]
+
 condition1 = ["RED_SQUARE_SMALL",
               "RED_SQUARE_LARGE",
               "RED_TRIANGLE_SMALL",
