@@ -69,12 +69,14 @@ responseMatrix = []
 hs = hypothesis_space[options.condition]
 d = data[options.condition]
 
-for h in hs:
-    for o in uniqueStimuli:
+responseMatrix = numpy.zeros((len(hs), len(uniqueStimuli)))
+
+for hi, h in enumerate(hs):
+    for oi, o in enumerate(uniqueStimuli):
         if h(o):
-            responseMatrix.append(1)
+            responseMatrix[hi, oi] = 1
         else:
-            responseMatrix.append(0)
+            responseMatrix[hi, oi] = 0
 
 # Iterate through each trial for all conditions
 for row in behavioralData.itertuples():
@@ -114,13 +116,15 @@ for row in behavioralData.itertuples():
     pHumanData = log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
-    dataPs = [numpy.dot(h.posterior_score - Z, responseMatrix) for h in hs]
+
+    post = [h.posterior_score - Z for h in hs]
+    dataPs = [numpy.dot(post, responseMatrix)]
 
     entropy = sum([p * log(p) for p in hypPs])
     domainEntropy = sum([p * numpy.log10(p) for p in dataPs])
 
-    changeInEntropy = entropy - previousEntropy
-    changeInDomainEntropy = domainEntropy - previousDomainEntropy
+    changeInEntropy = previousEntropy - entropy
+    changeInDomainEntropy = previousDomainEntropy - domainEntropy
 
     if previousHypPs:
         for p, p2 in itertools.izip(hypPs, previousHypPs):
@@ -141,7 +145,7 @@ for row in behavioralData.itertuples():
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
                 str(-entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
-                str(highestLikelihood) + str(-changeInEntropy) + str(-crossEntropy) +
-                str(-domainEntropy) + str(-changeInDomainEntropy) + str(-domainCrossEntropy) + '\n')
+                str(highestLikelihood) + str(changeInEntropy) + str(-crossEntropy) +
+                str(-domainEntropy) + str(changeInDomainEntropy) + str(-domainCrossEntropy) + '\n')
 
 print "Done"

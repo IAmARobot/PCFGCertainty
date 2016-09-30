@@ -55,19 +55,15 @@ for study in xrange(1, 4):
 
     print "# Constructed data"
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Main loop
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # print "alpha beta pHumanData" # if you want a header
-
-    #for alpha in numpy.linspace(0, 1, num = 10):
-    for beta in numpy.linspace(0, .3, num = 31):
+    for beta in numpy.linspace(0, 1, num = 5):
         print "# Starting", options.alpha, beta
 
         # Set the decays
         for hs in hypothesis_space.values():
             for h in hs:
                 h.ll_decay = beta
+
+        pHumanData = 0
 
         for row in behavioralData.itertuples():
             condition, trial, number_accurate, number_inaccurate = row[1:5]
@@ -94,7 +90,7 @@ for study in xrange(1, 4):
             predicted_accuracy = options.alpha * hyp_accuracy + (1 - options.alpha) * .5
 
             # compute the probability of the observed responses given the model prediction
-            pHumanData = log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
+            pHumanData += log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
         print options.alpha, beta, pHumanData
 
