@@ -2,7 +2,6 @@ import os
 import pickle
 from Data import make_data, uniqueStimuli
 from LOTlib.Miscellaneous import logsumexp, Infinity
-from Primitives import *
 from Hypothesis import *
 import pandas
 import math
@@ -18,6 +17,8 @@ parser.add_option("--alpha", dest="alpha", type="float", default=0.65, help="Rel
 parser.add_option("--beta", dest="beta", type="float", default=0.06, help="Memory decay value 0-5")
 parser.add_option("--condition", dest="condition", type="int", default='1', help="Which condition are we running for?")
 parser.add_option("-s", action = "store_true", dest = "isOneShot", help = "Is this a single trial experiment?")
+parser.add_option("--input", dest="input", type="string", default="Study1Counts.csv", help="Input file")
+parser.add_option("--output", dest="output", type="string", default="modelDataStudy1.csv", help="Output file")
 
 (options, args) = parser.parse_args()
 
@@ -31,20 +32,17 @@ hypothesis_space = dict()
 
 hypothesis_space[options.condition] = set()
 
-counts = "Study1Counts.csv"
-
 for i in os.listdir("Data/condition" + str(options.condition)):
     if (i == "condition" + str(options.condition) + "_8.pkl"):
         with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
             hypothesis_space[options.condition].update(pickle.load(f))
-            counts = "Study2Counts.csv"
     elif (not options.isOneShot):
         with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
             hypothesis_space[options.condition].update(pickle.load(f))
 
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
-behavioralData = pandas.read_csv(counts)
+behavioralData = pandas.read_csv(options.input)
 print "# Loaded behavioral data"
 
 data = dict()
@@ -139,7 +137,7 @@ for row in behavioralData.itertuples():
     previousDomainEntropy = domainEntropy
     previousHypPs = hypPs
 
-    with open('modelData.csv', 'a') as f:
+    with open(options.output, 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
                 str(-entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
