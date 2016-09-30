@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-rm modelData.csv
+rm modelDataStudy1.csv
+rm modelDataStudy2.csv
+rm modelDataStudy3.csv
 
 for condition in 1 2 3 4 5 6 7 8 9 10
 do
