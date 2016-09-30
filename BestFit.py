@@ -55,7 +55,7 @@ for study in xrange(1, 4):
 
     print "# Constructed data"
 
-    for beta in numpy.linspace(0, 1, num = 5):
+    for beta in numpy.linspace(0, .1, num = 10):
         print "# Starting", options.alpha, beta
 
         # Set the decays
