@@ -31,17 +31,20 @@ hypothesis_space = dict()
 
 hypothesis_space[options.condition] = set()
 
+counts = "Study1Counts.csv"
+
 for i in os.listdir("Data/condition" + str(options.condition)):
     if (i == "condition" + str(options.condition) + "_8.pkl"):
         with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
             hypothesis_space[options.condition].update(pickle.load(f))
+            counts = "Study2Counts.csv"
     elif (not options.isOneShot):
         with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
             hypothesis_space[options.condition].update(pickle.load(f))
 
 print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
 
-behavioralData = pandas.read_csv('counts.csv')
+behavioralData = pandas.read_csv(counts)
 print "# Loaded behavioral data"
 
 data = dict()
