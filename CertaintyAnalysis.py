@@ -73,7 +73,10 @@ d = data[options.condition]
 
 for h in hs:
     for o in uniqueStimuli:
-        responseMatrix.append(h(o))
+        if h(o):
+            responseMatrix.append(1)
+        else:
+            responseMatrix.append(0)
 
 # Iterate through each trial for all conditions
 for row in behavioralData.itertuples():
@@ -113,8 +116,7 @@ for row in behavioralData.itertuples():
     pHumanData = log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
-    dataPs = [numpy.dot(h, responseMatrix) for h in hs]
-
+    dataPs = [numpy.dot(h.posterior_score - Z, responseMatrix) for h in hs]
 
     entropy = sum([p * log(p) for p in hypPs])
     domainEntropy = sum(dataPs * log(dataPs))
