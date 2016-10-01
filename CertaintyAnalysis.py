@@ -146,7 +146,7 @@ for row in behavioralData.itertuples():
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
                 str(-entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
-                str(highestLikelihood) + str(changeInEntropy) + str(-crossEntropy) +
-                str(-domainEntropy) + str(changeInDomainEntropy) + str(-domainCrossEntropy) + '\n')
+                str(highestLikelihood) + ',' + str(changeInEntropy) + ',' + str(-crossEntropy) + ',' +
+                str(-domainEntropy) + ',' + str(changeInDomainEntropy) + ',' + str(-domainCrossEntropy) + '\n')
 
 print "Done"
