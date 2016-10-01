@@ -8,6 +8,7 @@ import math
 from optparse import OptionParser
 import itertools
 import numpy
+from Primitives import *
 
 #############################################################################################
 #    Option Parser
