@@ -124,6 +124,7 @@ for row in behavioralData.itertuples():
 
     entropy = sum([p * log(p) for p in hypPs])
     domainEntropy = sum([p * numpy.log10(p) for p in dataPs])
+    print domainEntropy
 
     changeInEntropy = previousEntropy - entropy
     changeInDomainEntropy = previousDomainEntropy - domainEntropy
