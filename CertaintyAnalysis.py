@@ -75,7 +75,6 @@ responseMatrix = numpy.zeros((len(hs), len(uniqueStimuli)))
 for hi, h in enumerate(hs):
     for oi, o in enumerate(uniqueStimuli):
         if h(o):
-            print "yes"
             responseMatrix[hi, oi] = 1
 
 # Iterate through each trial for all conditions
@@ -121,6 +120,10 @@ for row in behavioralData.itertuples():
     print post
     dataPs = numpy.dot(post, responseMatrix)
     print dataPs
+
+    for p in dataPs:
+        print p
+        print type(p)
 
     entropy = sum([p * log(p) for p in hypPs])
     domainEntropy = sum(p * log(p) for p in dataPs)
