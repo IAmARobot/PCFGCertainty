@@ -119,11 +119,11 @@ for row in behavioralData.itertuples():
 
     post = [h.posterior_score - Z for h in hs]
     print post
-    dataPs = [numpy.dot(post, responseMatrix)]
+    dataPs = numpy.dot(post, responseMatrix)
     print dataPs
 
     entropy = sum([p * log(p) for p in hypPs])
-    domainEntropy = sum([p * numpy.log10(p) for p in dataPs])
+    domainEntropy = sum(p * numpy.log10(p) for p in dataPs)
     print domainEntropy
 
     changeInEntropy = previousEntropy - entropy
