@@ -121,6 +121,8 @@ for row in behavioralData.itertuples():
     dataPs = numpy.dot(post, responseMatrix)
     print dataPs
 
+    dataPs = dataPs.tolist()
+
     for p in dataPs:
         print p
         print type(p)
