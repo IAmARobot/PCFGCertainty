@@ -115,22 +115,10 @@ for row in behavioralData.itertuples():
     pHumanData = log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
-
-    post = [h.posterior_score - Z for h in hs]
-    print post
-    dataPs = numpy.dot(post, responseMatrix)
-    print dataPs
-
-    dataPs = dataPs.tolist()
-
-    for p in dataPs:
-        print p
-        print type(p)
-        log(p)
+    dataPs = numpy.dot(hypPs, responseMatrix)
 
     entropy = sum([p * log(p) for p in hypPs])
-    domainEntropy = 0#sum(p * log(p) for p in dataPs)
-    print domainEntropy
+    domainEntropy = sum([p * log(p) for p in dataPs])
 
     changeInEntropy = previousEntropy - entropy
     changeInDomainEntropy = previousDomainEntropy - domainEntropy
