@@ -117,8 +117,6 @@ for row in behavioralData.itertuples():
     hypPs = [math.exp(h.posterior_score - Z) for h in hs]
     dataPs = numpy.dot(hypPs, responseMatrix)
 
-    print(type(dataPs))
-
     entropy = sum([p * log(p) for p in hypPs])
     domainEntropy = sum([p * log(p) for p in dataPs])
 
@@ -139,6 +137,7 @@ for row in behavioralData.itertuples():
     previousEntropy = entropy
     previousDomainEntropy = domainEntropy
     previousHypPs = hypPs
+    previousDataPs = dataPs
 
     with open(options.output, 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
