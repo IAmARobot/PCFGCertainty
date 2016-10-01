@@ -9,8 +9,8 @@ do
     mpirun python CertaintyAnalysis.py --alpha .640 --beta 0 --condition $condition --input Study1Counts.csv --output modelDataStudy1.csv &
 
     # One Shot
-    #mpirun -np 2 python CertaintyAnalysis.py --alpha .655 --beta .066 -s --condition $condition --input Study2Counts.csv --output modelDataStudy2.csv
+    mpirun python CertaintyAnalysis.py --alpha .655 --beta .066 -s --condition $condition --input Study2Counts.csv --output modelDataStudy2.csv &
 
     # Trial Certainty
-    #mpirun -np 2 python CertaintyAnalysis.py --alpha .660 --beta 0 --condition $condition --input Study3Counts.csv --output modelDataStudy3.csv
+    mpirun python CertaintyAnalysis.py --alpha .660 --beta 0 --condition $condition --input Study3Counts.csv --output modelDataStudy3.csv &
 done
