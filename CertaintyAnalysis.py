@@ -123,13 +123,11 @@ for row in behavioralData.itertuples():
     changeInEntropy = previousEntropy - entropy
     changeInDomainEntropy = previousDomainEntropy - domainEntropy
 
-    if previousHypPs:
-        for p, p2 in itertools.izip(hypPs, previousHypPs):
-            crossEntropy += p * log(p / p2)
+    for p, p2 in itertools.izip(hypPs, previousHypPs):
+        crossEntropy += p * log(p / p2)
 
-    if previousDataPs:
-        for p, p2 in itertools.izip(dataPs, previousDataPs):
-            domainCrossEntropy += p * log(p / p2)
+    for p, p2 in itertools.izip(dataPs, previousDataPs):
+        domainCrossEntropy += p * log(p / p2)
 
     highestPosterior = math.exp(highestPosterior - Z)
     highestLikelihood = math.exp(highestLikelihood - Zml)
