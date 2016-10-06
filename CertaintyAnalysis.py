@@ -53,7 +53,7 @@ if options.isOneShot:
 else:
     range = 24
 
-data[options.condition] = [make_data(str(options.condition), time, alpha = options.alpha) for time in xrange(range)]
+data[options.condition] = [make_data(options.condition, time, alpha = options.alpha) for time in xrange(range)]
 
 print "# Constructed data"
 
