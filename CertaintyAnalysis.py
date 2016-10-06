@@ -120,7 +120,7 @@ for row in behavioralData.itertuples():
 
     currentStimuli = conditions[condition][0][trial - 1]
 
-    for stimuli, i in enumerate(uniqueStimuli):
+    for i, stimuli in enumerate(uniqueStimuli):
 
         print(stimuli)
         print(currentStimuli)
