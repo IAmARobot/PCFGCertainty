@@ -121,10 +121,6 @@ for row in behavioralData.itertuples():
     currentStimuli = conditions[condition][0][trial - 1]
 
     for i, stimuli in enumerate(uniqueStimuli):
-
-        print(stimuli)
-        print(currentStimuli)
-
         if stimuli == currentStimuli:
             stimuliPosterior = dataPosteriors[i]
             break
