@@ -118,7 +118,7 @@ for row in behavioralData.itertuples():
     hypothesesPosteriors = [math.exp(hypothesis.posterior_score - Z) for hypothesis in hypothesisSpace]
     dataPosteriors = numpy.dot(hypothesesPosteriors, responseMatrix)
 
-    for stimuli, i in uniqueStimuli:
+    for stimuli, i in enumerate(uniqueStimuli):
         if stimuli == conditions[condition][0][trial - 1]:
             stimuliPosterior = dataPosteriors[i]
             break
