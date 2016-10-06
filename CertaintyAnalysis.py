@@ -41,7 +41,7 @@ for i in os.listdir("Data/condition" + str(options.condition)):
         with open("Data/condition" + str(options.condition) + '/' +  i, 'r') as f:
             hypothesis_space[options.condition].update(pickle.load(f))
 
-print "# Loaded hypothesis spaces ", [ len(hs) for hs in hypothesis_space.values() ]
+print "# Loaded hypothesis spaces ", [ len(hypothesisSpace) for hypothesisSpace in hypothesis_space.values() ]
 
 behavioralData = pandas.read_csv(options.input)
 print "# Loaded behavioral data"
@@ -57,9 +57,9 @@ data[options.condition] = [make_data('condition' + str(options.condition), time,
 
 print "# Constructed data"
 
-for hs in hypothesis_space.values():
-    for h in hs:
-        h.ll_decay = options.beta
+for hypothesisSpace in hypothesis_space.values():
+    for hypothesis in hypothesisSpace:
+        hypothesis.ll_decay = options.beta
 
 previousEntropy = 0
 previousDomainEntropy = 0
@@ -67,12 +67,11 @@ previousHypPs = []
 previousDataPs = []
 responseMatrix = []
 
-hs = hypothesis_space[options.condition]
-d = data[options.condition]
+hypothesisSpace = hypothesis_space[options.condition]
 
-responseMatrix = numpy.zeros((len(hs), len(uniqueStimuli)))
+responseMatrix = numpy.zeros((len(hypothesisSpace), len(uniqueStimuli)))
 
-for hi, h in enumerate(hs):
+for hi, h in enumerate(hypothesisSpace):
     for oi, o in enumerate(uniqueStimuli):
         if h(o):
             responseMatrix[hi, oi] = 1
@@ -89,23 +88,23 @@ for row in behavioralData.itertuples():
     highestLikelihood = -Infinity
 
     # compute the posterior
-    for h in hs:
+    for hypothesis in hypothesisSpace:
         if (not options.isOneShot):
-            h.compute_posterior(d[0:trial]) # all previous data
+            hypothesis.compute_posterior(data[0:trial]) # all previous data
         else:
-            h.compute_posterior(d[0:8])
+            hypothesis.compute_posterior(data[0:8])
 
-        if (h.likelihood > highestLikelihood):
-            highestLikelihood = h.likelihood
+        if (hypothesis.likelihood > highestLikelihood):
+            highestLikelihood = hypothesis.likelihood
 
-        if (h.posterior_score > highestPosterior):
-            highestPosterior = h.posterior_score
+        if (hypothesis.posterior_score > highestPosterior):
+            highestPosterior = hypothesis.posterior_score
 
-    Z = logsumexp([h.posterior_score for h in hs])
-    Zml = logsumexp([h.likelihood for h in hs])
+    Z = logsumexp([hypothesis.posterior_score for hypothesis in hypothesisSpace])
+    Zml = logsumexp([hypothesis.likelihood for hypothesis in hypothesisSpace])
 
     # compute the predicted probability of being accurate
-    hyp_accuracy = sum([math.exp(h.posterior_score - Z) for h in hs if h(*d[trial - 1].input) == d[trial - 1].output])
+    hyp_accuracy = sum([math.exp(hypothesis.posterior_score - Z) for hypothesis in hypothesisSpace if hypothesis(*d[trial - 1].input) == d[trial - 1].output])
     assert 0 <= hyp_accuracy <= 1
 
     # mix to in the alpha (again) to account for the noise assumed in the model
@@ -114,28 +113,31 @@ for row in behavioralData.itertuples():
     # compute the probability of the observed responses given the model prediction
     pHumanData = log(predicted_accuracy) * number_accurate + log(1 - predicted_accuracy) * number_inaccurate
 
-    hypPs = [math.exp(h.posterior_score - Z) for h in hs]
-    dataPs = numpy.dot(hypPs, responseMatrix)
+    hypothesesPosteriors = [math.exp(hypothesis.posterior_score - Z) for hypothesis in hypothesisSpace]
+    dataPosteriors = numpy.dot(hypothesesPosteriors, responseMatrix)
 
-    entropy = sum([p * log(p) for p in hypPs])
-    domainEntropy = sum([p * log(p) for p in dataPs])
+    print(data[trial])
+
+
+    entropy = sum([posterior * log(posterior) for posterior in hypothesesPosteriors])
+    domainEntropy = sum([posterior * log(posterior) for posterior in dataPosteriors])
 
     changeInEntropy = previousEntropy - entropy
     changeInDomainEntropy = previousDomainEntropy - domainEntropy
 
-    for p, p2 in itertools.izip(hypPs, previousHypPs):
-        crossEntropy += p * log(p / p2)
+    for posterior, previousPosterior in itertools.izip(hypothesesPosteriors, previousHypPs):
+        crossEntropy += posterior * log(posterior / previousPosterior)
 
-    for p, p2 in itertools.izip(dataPs, previousDataPs):
-        domainCrossEntropy += p * log(p / p2)
+    for posterior, previousPosterior in itertools.izip(dataPosteriors, previousDataPs):
+        domainCrossEntropy += posterior * log(posterior / previousPosterior)
 
     highestPosterior = math.exp(highestPosterior - Z)
     highestLikelihood = math.exp(highestLikelihood - Zml)
 
     previousEntropy = entropy
     previousDomainEntropy = domainEntropy
-    previousHypPs = hypPs
-    previousDataPs = dataPs
+    previousHypPs = hypothesesPosteriors
+    previousDataPs = dataPosteriors
 
     with open(options.output, 'a') as f:
         f.write(str(condition) + ',' + str(trial) + ',' + str(number_accurate) + ',' +
