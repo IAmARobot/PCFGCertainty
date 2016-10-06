@@ -1,6 +1,6 @@
 import os
 import pickle
-from Data import make_data, uniqueStimuli
+from Data import make_data, uniqueStimuli, conditions
 from LOTlib.Miscellaneous import logsumexp, Infinity
 from Hypothesis import *
 import pandas
@@ -65,7 +65,8 @@ previousEntropy = 0
 previousDomainEntropy = 0
 previousHypPs = []
 previousDataPs = []
-responseMatrix = []
+
+stimuliPosterior = 0
 
 hypothesisSpace = hypothesis_space[options.condition]
 d = data[options.condition]
@@ -117,8 +118,10 @@ for row in behavioralData.itertuples():
     hypothesesPosteriors = [math.exp(hypothesis.posterior_score - Z) for hypothesis in hypothesisSpace]
     dataPosteriors = numpy.dot(hypothesesPosteriors, responseMatrix)
 
-    print(d[trial])
-
+    for stimuli, i in uniqueStimuli:
+        if stimuli == conditions[condition][0][trial - 1]:
+            stimuliPosterior = dataPosteriors[i]
+            break
 
     entropy = sum([posterior * log(posterior) for posterior in hypothesesPosteriors])
     domainEntropy = sum([posterior * log(posterior) for posterior in dataPosteriors])
@@ -145,6 +148,7 @@ for row in behavioralData.itertuples():
                 str(number_inaccurate) + ',' + str(hyp_accuracy) + ',' + str(predicted_accuracy) + ',' +
                 str(-entropy) + ',' + str(pHumanData) + ',' + str(highestPosterior) + ',' +
                 str(highestLikelihood) + ',' + str(changeInEntropy) + ',' + str(-crossEntropy) + ',' +
-                str(-domainEntropy) + ',' + str(changeInDomainEntropy) + ',' + str(-domainCrossEntropy) + '\n')
+                str(-domainEntropy) + ',' + str(changeInDomainEntropy) + ',' + str(-domainCrossEntropy) + ',' +
+                str(stimuliPosterior) + '\n')
 
 print "Done"
