@@ -68,6 +68,7 @@ previousDataPs = []
 responseMatrix = []
 
 hypothesisSpace = hypothesis_space[options.condition]
+d = data[options.condition]
 
 responseMatrix = numpy.zeros((len(hypothesisSpace), len(uniqueStimuli)))
 
@@ -90,9 +91,9 @@ for row in behavioralData.itertuples():
     # compute the posterior
     for hypothesis in hypothesisSpace:
         if (not options.isOneShot):
-            hypothesis.compute_posterior(data[0:trial]) # all previous data
+            hypothesis.compute_posterior(d[0:trial]) # all previous data
         else:
-            hypothesis.compute_posterior(data[0:8])
+            hypothesis.compute_posterior(d[0:8])
 
         if (hypothesis.likelihood > highestLikelihood):
             highestLikelihood = hypothesis.likelihood
@@ -116,7 +117,7 @@ for row in behavioralData.itertuples():
     hypothesesPosteriors = [math.exp(hypothesis.posterior_score - Z) for hypothesis in hypothesisSpace]
     dataPosteriors = numpy.dot(hypothesesPosteriors, responseMatrix)
 
-    print(data[trial])
+    print(d[trial])
 
 
     entropy = sum([posterior * log(posterior) for posterior in hypothesesPosteriors])
