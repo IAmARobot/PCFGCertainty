@@ -22,7 +22,7 @@ parser.add_option("--alpha", dest="alpha", type="float", default=0.01, help="Rel
 #    MAIN CODE
 #############################################################################################
 
-for study in xrange(1, 5):
+for study in xrange(4, 5):
     # Populate hypothesis space for each condition
     # Let's make a single set, the union of the sets over time
     hypothesis_space = dict()
