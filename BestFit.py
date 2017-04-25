@@ -51,7 +51,7 @@ for study in xrange(4, 5):
         range = 24
 
     for condition in xrange(1, 11):
-        data[condition] = [make_data('condition' + str(condition), time, alpha = options.alpha) for time in xrange(range)]
+        data[condition] = [make_data(condition, time, alpha = options.alpha) for time in xrange(range)]
 
     print "# Constructed data"
 
