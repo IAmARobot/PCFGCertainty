@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for condition in "condition1" "condition2" "condition3" "condition4" "condition5" "condition6" "condition7" "condition8" "condition9" "condition10"
+for condition in 1 2 3 4 5 6 7 8 9 10
 do
     for time in {0..23}
     do
