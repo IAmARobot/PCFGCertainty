@@ -23,7 +23,7 @@ parser.add_option("--chains", dest = "chains", type = "int", default = 1, help =
 
 parser.add_option("--alpha", dest = "alpha", type = "float", default = 0.64, help = "Reliability value (0-1]")
 parser.add_option("--beta", dest = "beta", type = "float", default = 0, help = "Memory decay value 0-5")
-parser.add_option("--condition", dest = "condition", type = "str", default = 'condition9', help = "Which condition are we running for?")
+parser.add_option("--condition", dest = "condition", type = "int", default = '9', help = "Which condition are we running for?")
 parser.add_option("--time", dest = "time", type = "int", default = 24, help = "With how many data points?")
 
 parser.add_option("--llt", dest = "llt", type = "float", default = 1.0, help = "Likelihood temperature")
